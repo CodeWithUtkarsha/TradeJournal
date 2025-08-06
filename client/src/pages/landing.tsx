@@ -150,6 +150,91 @@ export default function Landing() {
           </Card>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="py-16 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-4 gap-8 mb-12">
+            {/* Brand */}
+            <div className="md:col-span-1">
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-electric-blue to-cyber-purple rounded-lg flex items-center justify-center">
+                  <Brain className="text-sm text-white" />
+                </div>
+                <span className="text-xl font-bold gradient-text">TradeZella Pro</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">
+                The next-generation trading journal platform powered by AI and advanced analytics.
+              </p>
+              <div className="flex space-x-4">
+                <div className="w-8 h-8 glass-morphism rounded-lg flex items-center justify-center cursor-pointer hover:border-electric-blue transition-colors">
+                  <span className="text-xs">𝕏</span>
+                </div>
+                <div className="w-8 h-8 glass-morphism rounded-lg flex items-center justify-center cursor-pointer hover:border-electric-blue transition-colors">
+                  <span className="text-xs">📘</span>
+                </div>
+                <div className="w-8 h-8 glass-morphism rounded-lg flex items-center justify-center cursor-pointer hover:border-electric-blue transition-colors">
+                  <span className="text-xs">💼</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Product */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Product</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Features</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Pricing</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">API</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Integrations</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Roadmap</a></li>
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Resources</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Documentation</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Tutorials</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Community</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Support</a></li>
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Company</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-electric-blue transition-colors">About</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Privacy</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Terms</a></li>
+                <li><a href="#" className="hover:text-electric-blue transition-colors">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm">
+              © 2025 TradeZella Pro. All rights reserved.
+            </p>
+            <div className="flex items-center space-x-6 mt-4 md:mt-0">
+              <span className="text-xs text-gray-500">Built with</span>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-electric-blue rounded-full animate-pulse"></div>
+                <span className="text-xs text-gray-400">AI Technology</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-cyber-purple rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                <span className="text-xs text-gray-400">Real-time Data</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
