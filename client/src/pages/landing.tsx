@@ -38,14 +38,17 @@ export default function Landing() {
             </div>
             
             <div className="relative animate-float">
-              <img 
-                src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                alt="Futuristic trading dashboard with dark theme and neon accents" 
-                className="rounded-2xl shadow-2xl w-full"
-              />
-              
-              {/* Floating trade cards */}
-              <div className="absolute -top-4 -right-4 glass-morphism p-4 rounded-xl animate-float" style={{ animationDelay: '0.5s' }}>
+              {/* Floating trade cards with background image */}
+              <div 
+                className="absolute -top-4 -right-4 glass-morphism p-4 rounded-xl animate-float"
+                style={{ 
+                  animationDelay: '0.5s',
+                  backgroundImage: 'url(https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundBlendMode: 'overlay'
+                }}
+              >
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   <span className="text-sm font-semibold">+$1,247</span>
@@ -53,13 +56,28 @@ export default function Landing() {
                 <p className="text-xs text-gray-400">TSLA Long</p>
               </div>
               
-              <div className="absolute -bottom-4 -left-4 glass-morphism p-4 rounded-xl animate-float" style={{ animationDelay: '1s' }}>
+              <div 
+                className="absolute -bottom-4 -left-4 glass-morphism p-4 rounded-xl animate-float"
+                style={{ 
+                  animationDelay: '1s',
+                  backgroundImage: 'url(https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundBlendMode: 'overlay'
+                }}
+              >
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-electric-blue rounded-full"></div>
                   <span className="text-sm font-semibold">AI Insight</span>
                 </div>
                 <p className="text-xs text-gray-400">Pattern Detected</p>
               </div>
+              
+              <img 
+                src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                alt="Futuristic trading dashboard with dark theme and neon accents" 
+                className="rounded-2xl shadow-2xl w-full"
+              />
             </div>
           </div>
         </div>
