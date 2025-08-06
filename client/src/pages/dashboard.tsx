@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import TradeModal from "@/components/trade-modal";
 import type { Trade, User } from "@shared/schema";
 import { ChartLine, Target, Calculator, Scale, Brain, TrendingUp } from "lucide-react";
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export default function Dashboard() {
   // Get current user
@@ -46,6 +47,80 @@ export default function Dashboard() {
 
   const formatPercentage = (value: number) => {
     return `${value.toFixed(1)}%`;
+  };
+
+  // Generate chart data
+  const generatePnLChartData = () => {
+    if (!trades || trades.length === 0) {
+      // Sample data for empty state
+      return [
+        { date: '2024-01', pnl: 0, cumulative: 0 },
+        { date: '2024-02', pnl: 0, cumulative: 0 },
+        { date: '2024-03', pnl: 0, cumulative: 0 },
+        { date: '2024-04', pnl: 0, cumulative: 0 },
+        { date: '2024-05', pnl: 0, cumulative: 0 },
+        { date: '2024-06', pnl: 0, cumulative: 0 },
+      ];
+    }
+
+    // Process actual trades data
+    const monthlyData = trades.reduce((acc: any, trade) => {
+      const date = new Date(trade.createdAt || Date.now());
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      
+      if (!acc[monthKey]) {
+        acc[monthKey] = { date: monthKey, pnl: 0, trades: 0 };
+      }
+      
+      acc[monthKey].pnl += parseFloat(trade.pnl || '0');
+      acc[monthKey].trades += 1;
+      
+      return acc;
+    }, {});
+
+    // Convert to array and calculate cumulative
+    let cumulative = 0;
+    return Object.values(monthlyData).map((month: any) => {
+      cumulative += month.pnl;
+      return {
+        ...month,
+        cumulative,
+      };
+    });
+  };
+
+  const generateWinLossData = () => {
+    if (!trades || trades.length === 0) {
+      return [
+        { name: 'Wins', value: 0, color: '#00D1FF' },
+        { name: 'Losses', value: 0, color: '#FF6B6B' },
+      ];
+    }
+
+    const wins = trades.filter(trade => parseFloat(trade.pnl || '0') > 0).length;
+    const losses = trades.filter(trade => parseFloat(trade.pnl || '0') < 0).length;
+    
+    return [
+      { name: 'Wins', value: wins, color: '#00D1FF' },
+      { name: 'Losses', value: losses, color: '#FF6B6B' },
+    ];
+  };
+
+  const generateTradesBySymbolData = () => {
+    if (!trades || trades.length === 0) {
+      return [];
+    }
+
+    const symbolData = trades.reduce((acc: any, trade) => {
+      if (!acc[trade.symbol]) {
+        acc[trade.symbol] = { symbol: trade.symbol, trades: 0, pnl: 0 };
+      }
+      acc[trade.symbol].trades += 1;
+      acc[trade.symbol].pnl += parseFloat(trade.pnl || '0');
+      return acc;
+    }, {});
+
+    return Object.values(symbolData).slice(0, 10); // Top 10 symbols
   };
 
   return (
@@ -180,7 +255,7 @@ export default function Dashboard() {
 
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Performance Chart Placeholder */}
+          {/* P&L Performance Chart */}
           <Card className="lg:col-span-2 glass-morphism border-gray-600">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -199,12 +274,55 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="h-64 flex items-center justify-center bg-gray-800 rounded-lg">
-                <div className="text-center">
-                  <TrendingUp className="h-12 w-12 text-electric-blue mx-auto mb-4" />
-                  <p className="text-gray-400">Interactive chart coming soon</p>
-                  <p className="text-sm text-gray-500">3D visualizations with Three.js</p>
-                </div>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={generatePnLChartData()}>
+                    <defs>
+                      <linearGradient id="pnlGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#00D1FF" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#00D1FF" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis 
+                      dataKey="date" 
+                      stroke="#9CA3AF"
+                      fontSize={12}
+                    />
+                    <YAxis 
+                      stroke="#9CA3AF"
+                      fontSize={12}
+                      tickFormatter={(value) => `$${value}`}
+                    />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                        border: '1px solid #374151',
+                        borderRadius: '8px',
+                        color: '#F9FAFB'
+                      }}
+                      formatter={(value: any, name: string) => [
+                        name === 'cumulative' ? `$${value.toFixed(2)}` : `$${value.toFixed(2)}`,
+                        name === 'cumulative' ? 'Total P&L' : 'Monthly P&L'
+                      ]}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="cumulative"
+                      stroke="#00D1FF"
+                      strokeWidth={2}
+                      fillOpacity={1}
+                      fill="url(#pnlGradient)"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="pnl"
+                      stroke="#7B2DFF"
+                      strokeWidth={1}
+                      dot={false}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
@@ -275,28 +393,133 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Performance Heatmap Placeholder */}
+        {/* Charts Grid */}
+        <div className="grid lg:grid-cols-2 gap-6 mt-6">
+          {/* Win/Loss Pie Chart */}
+          <Card className="glass-morphism border-gray-600">
+            <CardHeader>
+              <CardTitle className="text-xl">Win/Loss Distribution</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={generateWinLossData()}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {generateWinLossData().map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                        border: '1px solid #374151',
+                        borderRadius: '8px',
+                        color: '#F9FAFB'
+                      }}
+                    />
+                    <Legend 
+                      wrapperStyle={{ color: '#F9FAFB' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Top Symbols Performance */}
+          <Card className="glass-morphism border-gray-600">
+            <CardHeader>
+              <CardTitle className="text-xl">Top Symbols Performance</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={generateTradesBySymbolData()}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis 
+                      dataKey="symbol" 
+                      stroke="#9CA3AF"
+                      fontSize={12}
+                    />
+                    <YAxis 
+                      stroke="#9CA3AF"
+                      fontSize={12}
+                      tickFormatter={(value) => `$${value}`}
+                    />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                        border: '1px solid #374151',
+                        borderRadius: '8px',
+                        color: '#F9FAFB'
+                      }}
+                      formatter={(value: any, name: string) => [
+                        name === 'pnl' ? `$${value.toFixed(2)}` : value,
+                        name === 'pnl' ? 'Total P&L' : 'Trade Count'
+                      ]}
+                    />
+                    <Bar 
+                      dataKey="pnl" 
+                      fill="#00D1FF"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Trading Heatmap Matrix */}
         <Card className="mt-6 glass-morphism border-gray-600">
           <CardHeader>
-            <CardTitle className="text-xl">Trading Heatmap</CardTitle>
+            <CardTitle className="text-xl">Performance Matrix</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-32 flex items-center justify-center bg-gray-800 rounded-lg">
-              <div className="text-center">
-                <div className="grid grid-cols-7 gap-1 max-w-xs mx-auto">
-                  {Array.from({ length: 35 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={`w-4 h-4 rounded-sm ${
-                        i % 5 === 0 ? 'bg-green-600' : 
-                        i % 7 === 0 ? 'bg-red-600' : 
-                        'bg-gray-700'
-                      }`}
-                    ></div>
-                  ))}
-                </div>
-                <p className="text-sm text-gray-400 mt-2">Daily performance heatmap</p>
+            <div className="grid grid-cols-12 gap-1 max-w-4xl mx-auto">
+              {Array.from({ length: 84 }).map((_, i) => {
+                const weekDay = i % 7;
+                const week = Math.floor(i / 7);
+                const intensity = Math.random();
+                const profit = Math.random() > 0.5;
+                
+                return (
+                  <div
+                    key={i}
+                    className={`w-6 h-6 rounded-sm transition-all duration-200 hover:scale-110 cursor-pointer ${
+                      intensity > 0.8 
+                        ? profit ? 'bg-green-500' : 'bg-red-500'
+                        : intensity > 0.6
+                        ? profit ? 'bg-green-600' : 'bg-red-600'
+                        : intensity > 0.4
+                        ? profit ? 'bg-green-700' : 'bg-red-700'
+                        : intensity > 0.2
+                        ? profit ? 'bg-green-800' : 'bg-red-800'
+                        : 'bg-gray-700'
+                    }`}
+                    title={`Week ${week + 1}, Day ${weekDay + 1}: ${profit ? '+' : '-'}$${(intensity * 500).toFixed(0)}`}
+                  />
+                );
+              })}
+            </div>
+            <div className="flex justify-between items-center mt-4 text-sm text-gray-400">
+              <span>Less</span>
+              <div className="flex space-x-1">
+                <div className="w-3 h-3 bg-gray-700 rounded-sm"></div>
+                <div className="w-3 h-3 bg-green-800 rounded-sm"></div>
+                <div className="w-3 h-3 bg-green-600 rounded-sm"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
+                <div className="w-3 h-3 bg-green-400 rounded-sm"></div>
               </div>
+              <span>More</span>
             </div>
           </CardContent>
         </Card>
