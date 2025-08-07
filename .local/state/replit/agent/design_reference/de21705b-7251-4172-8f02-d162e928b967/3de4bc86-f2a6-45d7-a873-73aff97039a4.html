@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeZella Pro - Advanced Trading Journal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'navy': '#0A0F24',
+                    'electric': '#00D1FF',
+                    'cyber': '#7B2DFF',
+                    'dark-card': '#1A1D29',
+                    'dark-border': '#2A2D3A'
+                },
+                fontFamily: {
+                    'inter': ['Inter', 'sans-serif']
+                },
+                animation: {
+                    'float': 'float 3s ease-in-out infinite',
+                    'glow': 'glow 2s ease-in-out infinite alternate',
+                    'slide-up': 'slideUp 0.5s ease-out'
+                },
+                backdropBlur: {
+                    'xs': '2px'
+                }
+            }
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(0, 209, 255, 0.5); }
+            to { box-shadow: 0 0 30px rgba(0, 209, 255, 0.8); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .glass-morphism {
+            background: rgba(26, 29, 41, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow:hover {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        .trade-card {
+            background: linear-gradient(135deg, rgba(26, 29, 41, 0.8) 0%, rgba(42, 45, 58, 0.4) 100%);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .trade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 209, 255, 0.1);
+        }
+        .chart-container {
+            background: radial-gradient(circle at center, rgba(123, 45, 255, 0.1) 0%, transparent 70%);
+        }
+    </style>
+</head>
+<body class="bg-navy font-inter text-white overflow-x-hidden">
+
+    <!-- @COMPONENT: NavigationHeader -->
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-morphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="text-2xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">
+                        TradeZella Pro
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#dashboard" class="hover:text-electric transition-colors">Dashboard</a>
+                    <a href="#analytics" class="hover:text-electric transition-colors">Analytics</a>
+                    <a href="#trades" class="hover:text-electric transition-colors">Trades</a>
+                    <button class="bg-gradient-to-r from-electric to-cyber px-6 py-2 rounded-full font-medium neon-glow transition-all">
+                        Log Trade
+                    </button>
+                </div>
+                <button class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: NavigationHeader -->
+
+    <!-- @COMPONENT: HeroSection -->
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <div class="absolute inset-0 bg-gradient-to-br from-navy via-dark-card to-navy"></div>
+        <div class="absolute inset-0 opacity-20">
+            <!-- A futuristic trading dashboard interface with glowing blue elements and dark theme -->
+            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&h=1380" alt="Futuristic trading dashboard" class="w-full h-full object-cover"/>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                <span class="bg-gradient-to-r from-electric via-cyber to-electric bg-clip-text text-transparent animate-pulse">
+                    Trade Smarter
+                </span>
+                <br />
+                <span class="text-white">with AI Insights</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                The most advanced trading journal platform with 3D analytics, AI-powered insights, and seamless mobile experience.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <button class="bg-gradient-to-r from-electric to-cyber px-8 py-4 rounded-full text-lg font-semibold neon-glow transition-all hover:scale-105">
+                    Start Free Trial
+                </button>
+                <button class="glass-morphism px-8 py-4 rounded-full text-lg font-semibold border border-electric/30 hover:border-electric transition-all">
+                    Watch Demo
+                </button>
+            </div>
+        </div>
+
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 animate-float opacity-60">
+            <div class="glass-morphism p-4 rounded-xl">
+                <div class="text-electric text-2xl">+$2,847</div>
+                <div class="text-sm text-gray-400">Today's P&L</div>
+            </div>
+        </div>
+        <div class="absolute top-40 right-20 animate-float opacity-60" style="animation-delay: -1s;">
+            <div class="glass-morphism p-4 rounded-xl">
+                <div class="text-green-400 text-2xl">78.5%</div>
+                <div class="text-sm text-gray-400">Win Rate</div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: HeroSection -->
+
+    <!-- @COMPONENT: MainDashboard -->
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">
+                        Your Trading Command Center
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Monitor your performance, analyze patterns, and make data-driven decisions with our advanced dashboard.
+                </p>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+                <!-- Portfolio Overview Card -->
+                <div class="lg:col-span-2 trade-card rounded-2xl p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-white">Portfolio Overview</h3>
+                        <div class="flex space-x-2">
+                            <button class="glass-morphism px-4 py-2 rounded-lg text-sm hover:bg-electric/10 transition-colors">1D</button>
+                            <button class="bg-electric/20 px-4 py-2 rounded-lg text-sm text-electric">1W</button>
+                            <button class="glass-morphism px-4 py-2 rounded-lg text-sm hover:bg-electric/10 transition-colors">1M</button>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container h-64 rounded-xl relative overflow-hidden mb-4">
+                        <!-- A financial trading chart showing upward trend with candlesticks and blue/green highlights -->
+                        <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&h=980" alt="Trading chart with upward trend" class="w-full h-full object-cover rounded-xl opacity-80"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="text-3xl font-bold text-green-400">$127,834</div>
+                            <div class="text-sm text-gray-400">Portfolio Value</div>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <div class="glass-morphism p-3 rounded-lg">
+                                <div class="text-green-400 font-semibold">+18.7%</div>
+                                <div class="text-xs text-gray-400">This Month</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="glass-morphism p-4 rounded-xl text-center">
+                            <div class="text-electric text-2xl font-bold">47</div>
+                            <div class="text-sm text-gray-400">Total Trades</div>
+                        </div>
+                        <div class="glass-morphism p-4 rounded-xl text-center">
+                            <div class="text-green-400 text-2xl font-bold">81.2%</div>
+                            <div class="text-sm text-gray-400">Win Rate</div>
+                        </div>
+                        <div class="glass-morphism p-4 rounded-xl text-center">
+                            <div class="text-cyber text-2xl font-bold">2.3</div>
+                            <div class="text-sm text-gray-400">Avg R:R</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="space-y-6">
+                    <!-- P&L Card -->
+                    <div class="trade-card rounded-2xl p-6">
+                        <h3 class="text-xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-chart-line text-electric mr-3"></i>
+                            Today's P&L
+                        </h3>
+                        <div class="text-3xl font-bold text-green-400 mb-2">+$2,847.50</div>
+                        <div class="text-sm text-gray-400 mb-4">+4.23% from yesterday</div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Realized</span>
+                                <span class="text-green-400">+$1,943</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Unrealized</span>
+                                <span class="text-green-400">+$904</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Trade Card -->
+                    <div class="trade-card rounded-2xl p-6">
+                        <h3 class="text-xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-clock text-electric mr-3"></i>
+                            Recent Trade
+                        </h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <div class="font-semibold text-lg">AAPL</div>
+                                <div class="text-sm text-gray-400">Long • 15:32</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-green-400 font-bold">+$456</div>
+                                <div class="text-sm text-gray-400">+2.1%</div>
+                            </div>
+                        </div>
+                        <div class="glass-morphism p-3 rounded-lg">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Entry:</span>
+                                <span>$150.25</span>
+                            </div>
+                            <div class="flex justify-between text-sm mt-1">
+                                <span class="text-gray-400">Exit:</span>
+                                <span>$153.41</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Insight Card -->
+                    <div class="trade-card rounded-2xl p-6 border border-cyber/30">
+                        <h3 class="text-xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-robot text-cyber mr-3"></i>
+                            AI Insight
+                        </h3>
+                        <div class="text-sm text-gray-300 leading-relaxed">
+                            Your FOMO trades have a 23% lower win rate. Consider waiting for your setup criteria before entering.
+                        </div>
+                        <button class="mt-4 text-cyber text-sm hover:underline">View Full Analysis →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: MainDashboard -->
+
+    <!-- @COMPONENT: TradeLogging -->
+    <!-- Quick Trade Log Section -->
+    <section id="trades" class="py-20 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">
+                    <span class="bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">
+                        Log Your Trades
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-300">Capture every detail to improve your trading performance</p>
+            </div>
+
+            <div class="trade-card rounded-2xl p-8">
+                <form class="space-y-6" data-implementation="Should validate and save trade data">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Symbol Input -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Symbol</label>
+                            <input type="text" placeholder="AAPL, TSLA, SPY..." 
+                                   class="w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white focus:border-electric focus:outline-none transition-colors"
+                                   data-mock="true">
+                        </div>
+
+                        <!-- Direction -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Direction</label>
+                            <select class="w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white focus:border-electric focus:outline-none transition-colors">
+                                <option data-mock="true">Long</option>
+                                <option data-mock="true">Short</option>
+                            </select>
+                        </div>
+
+                        <!-- Entry Price -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Entry Price</label>
+                            <input type="number" step="0.01" placeholder="0.00" 
+                                   class="w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white focus:border-electric focus:outline-none transition-colors"
+                                   data-mock="true">
+                        </div>
+
+                        <!-- Exit Price -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Exit Price</label>
+                            <input type="number" step="0.01" placeholder="0.00" 
+                                   class="w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white focus:border-electric focus:outline-none transition-colors"
+                                   data-mock="true">
+                        </div>
+
+                        <!-- Quantity -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Quantity</label>
+                            <input type="number" placeholder="100" 
+                                   class="w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white focus:border-electric focus:outline-none transition-colors"
+                                   data-mock="true">
+                        </div>
+
+                        <!-- Strategy -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Strategy</label>
+                            <select class="w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white focus:border-electric focus:outline-none transition-colors">
+                                <option data-mock="true">Breakout</option>
+                                <option data-mock="true">Mean Reversion</option>
+                                <option data-mock="true">Trend Following</option>
+                                <option data-mock="true">Scalping</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Emotion Tracking -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-4">Emotion Level</label>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-2xl">😡</span>
+                            <input type="range" min="1" max="5" value="3" 
+                                   class="flex-1 h-2 bg-dark-card rounded-lg appearance-none slider"
+                                   data-implementation="Custom slider styling needed">
+                            <span class="text-2xl">😌</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-400 mt-2">
+                            <span>Panicked</span>
+                            <span>Neutral</span>
+                            <span>Confident</span>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Tags</label>
+                        <input type="text" placeholder="London Session, EMA Bounce, High Volume..." 
+                               class="w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white focus:border-electric focus:outline-none transition-colors"
+                               data-mock="true">
+                    </div>
+
+                    <!-- Journal Entry -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Journal Entry</label>
+                        <textarea rows="4" placeholder="What happened? What did you learn?" 
+                                  class="w-full bg-dark-card border border-dark-border rounded-lg px-4 py-3 text-white focus:border-electric focus:outline-none transition-colors resize-none"
+                                  data-mock="true"></textarea>
+                    </div>
+
+                    <!-- Screenshot Upload -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Chart Screenshot</label>
+                        <div class="glass-morphism border-2 border-dashed border-dark-border rounded-lg p-8 text-center hover:border-electric/50 transition-colors cursor-pointer"
+                             data-implementation="File upload with drag and drop">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-electric mb-4"></i>
+                            <div class="text-gray-300">Drop your chart screenshot here or click to browse</div>
+                            <div class="text-sm text-gray-400 mt-2">PNG, JPG up to 10MB</div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" class="glass-morphism px-6 py-3 rounded-lg font-medium transition-colors hover:bg-white/5">
+                            Save Draft
+                        </button>
+                        <button type="submit" class="bg-gradient-to-r from-electric to-cyber px-8 py-3 rounded-lg font-medium neon-glow transition-all hover:scale-105"
+                                data-event="click:handleTradeSubmission">
+                            Log Trade
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: TradeLogging -->
+
+    <!-- @COMPONENT: AnalyticsHub -->
+    <!-- Analytics Section -->
+    <section id="analytics" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">
+                        Advanced Analytics
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Dive deep into your trading patterns and discover insights that drive consistent profitability.
+                </p>
+            </div>
+
+            <!-- Analytics Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Performance Heatmap -->
+                <div class="trade-card rounded-2xl p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold">Performance Heatmap</h3>
+                        <div class="flex space-x-2">
+                            <button class="glass-morphism px-3 py-1 rounded text-sm hover:bg-electric/10 transition-colors">Daily</button>
+                            <button class="bg-electric/20 px-3 py-1 rounded text-sm text-electric">Hourly</button>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container h-64 rounded-xl relative overflow-hidden">
+                        <!-- A complex trading analytics dashboard with heat map visualization and multiple data points -->
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&h=1380" alt="Analytics dashboard with heat map data visualization" class="w-full h-full object-cover rounded-xl opacity-70"/>
+                        <div class="absolute inset-0 bg-gradient-to-br from-electric/20 via-transparent to-cyber/20"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <div class="glass-morphism p-3 rounded-lg">
+                                <div class="text-sm text-gray-300">Best Performance</div>
+                                <div class="text-electric font-bold">10:30 - 11:30 AM</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex justify-between items-center text-sm">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 bg-red-500 rounded"></div>
+                            <span class="text-gray-400">Losses</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 bg-green-500 rounded"></div>
+                            <span class="text-gray-400">Wins</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Breakdown -->
+                <div class="trade-card rounded-2xl p-6">
+                    <h3 class="text-2xl font-bold mb-6">Strategy Performance</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- @MAP: strategies.map(strategy => ( -->
+                        <div class="glass-morphism p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium" data-bind="strategy.name">Breakout Trading</span>
+                                <span class="text-green-400 font-bold" data-bind="strategy.return">+24.3%</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-400 mb-2">
+                                <span>Win Rate: <span class="text-white" data-bind="strategy.winRate">78%</span></span>
+                                <span>Trades: <span class="text-white" data-bind="strategy.trades">23</span></span>
+                            </div>
+                            <div class="w-full bg-dark-card rounded-full h-2">
+                                <div class="bg-gradient-to-r from-electric to-green-400 h-2 rounded-full" style="width: 78%" data-bind="strategy.winRateBar"></div>
+                            </div>
+                        </div>
+
+                        <div class="glass-morphism p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium" data-bind="strategy.name">Mean Reversion</span>
+                                <span class="text-green-400 font-bold" data-bind="strategy.return">+18.7%</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-400 mb-2">
+                                <span>Win Rate: <span class="text-white" data-bind="strategy.winRate">65%</span></span>
+                                <span>Trades: <span class="text-white" data-bind="strategy.trades">31</span></span>
+                            </div>
+                            <div class="w-full bg-dark-card rounded-full h-2">
+                                <div class="bg-gradient-to-r from-electric to-green-400 h-2 rounded-full" style="width: 65%" data-bind="strategy.winRateBar"></div>
+                            </div>
+                        </div>
+
+                        <div class="glass-morphism p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium" data-bind="strategy.name">Scalping</span>
+                                <span class="text-red-400 font-bold" data-bind="strategy.return">-3.2%</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-400 mb-2">
+                                <span>Win Rate: <span class="text-white" data-bind="strategy.winRate">45%</span></span>
+                                <span>Trades: <span class="text-white" data-bind="strategy.trades">67</span></span>
+                            </div>
+                            <div class="w-full bg-dark-card rounded-full h-2">
+                                <div class="bg-gradient-to-r from-red-400 to-red-600 h-2 rounded-full" style="width: 45%" data-bind="strategy.winRateBar"></div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trade History Table -->
+            <div class="trade-card rounded-2xl p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold">Recent Trades</h3>
+                    <div class="flex space-x-4">
+                        <!-- Filters -->
+                        <select class="bg-dark-card border border-dark-border rounded-lg px-4 py-2 text-white text-sm focus:border-electric focus:outline-none">
+                            <option data-mock="true">All Strategies</option>
+                            <option data-mock="true">Breakout</option>
+                            <option data-mock="true">Mean Reversion</option>
+                        </select>
+                        <select class="bg-dark-card border border-dark-border rounded-lg px-4 py-2 text-white text-sm focus:border-electric focus:outline-none">
+                            <option data-mock="true">Last 7 Days</option>
+                            <option data-mock="true">Last 30 Days</option>
+                            <option data-mock="true">All Time</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-dark-border">
+                                <th class="text-left py-4 px-2 text-gray-400 font-medium">Date</th>
+                                <th class="text-left py-4 px-2 text-gray-400 font-medium">Symbol</th>
+                                <th class="text-left py-4 px-2 text-gray-400 font-medium">Side</th>
+                                <th class="text-left py-4 px-2 text-gray-400 font-medium">Strategy</th>
+                                <th class="text-left py-4 px-2 text-gray-400 font-medium">P&L</th>
+                                <th class="text-left py-4 px-2 text-gray-400 font-medium">R:R</th>
+                                <th class="text-left py-4 px-2 text-gray-400 font-medium">Emotion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- @MAP: trades.map(trade => ( -->
+                            <tr class="border-b border-dark-border/50 hover:bg-dark-card/50 transition-colors" data-mock="true">
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.date">Dec 15</td>
+                                <td class="py-4 px-2 font-medium" data-bind="trade.symbol">AAPL</td>
+                                <td class="py-4 px-2">
+                                    <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-sm" data-bind="trade.side">Long</span>
+                                </td>
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.strategy">Breakout</td>
+                                <td class="py-4 px-2 text-green-400 font-medium" data-bind="trade.pnl">+$456</td>
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.rr">2.1</td>
+                                <td class="py-4 px-2">
+                                    <div class="flex space-x-1">
+                                        <span class="text-yellow-400">😊</span>
+                                        <span class="text-sm text-gray-400" data-bind="trade.emotion">4/5</span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="border-b border-dark-border/50 hover:bg-dark-card/50 transition-colors" data-mock="true">
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.date">Dec 14</td>
+                                <td class="py-4 px-2 font-medium" data-bind="trade.symbol">TSLA</td>
+                                <td class="py-4 px-2">
+                                    <span class="bg-red-500/20 text-red-400 px-2 py-1 rounded text-sm" data-bind="trade.side">Short</span>
+                                </td>
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.strategy">Mean Reversion</td>
+                                <td class="py-4 px-2 text-red-400 font-medium" data-bind="trade.pnl">-$123</td>
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.rr">0.8</td>
+                                <td class="py-4 px-2">
+                                    <div class="flex space-x-1">
+                                        <span class="text-orange-400">😐</span>
+                                        <span class="text-sm text-gray-400" data-bind="trade.emotion">2/5</span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="border-b border-dark-border/50 hover:bg-dark-card/50 transition-colors" data-mock="true">
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.date">Dec 13</td>
+                                <td class="py-4 px-2 font-medium" data-bind="trade.symbol">SPY</td>
+                                <td class="py-4 px-2">
+                                    <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-sm" data-bind="trade.side">Long</span>
+                                </td>
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.strategy">Scalping</td>
+                                <td class="py-4 px-2 text-green-400 font-medium" data-bind="trade.pnl">+$89</td>
+                                <td class="py-4 px-2 text-gray-300" data-bind="trade.rr">1.5</td>
+                                <td class="py-4 px-2">
+                                    <div class="flex space-x-1">
+                                        <span class="text-green-400">😌</span>
+                                        <span class="text-sm text-gray-400" data-bind="trade.emotion">5/5</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- @END_MAP )) -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: AnalyticsHub -->
+
+    <!-- @COMPONENT: PricingSection -->
+    <!-- Pricing Section -->
+    <section class="py-20 relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">
+                        Choose Your Plan
+                    </span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Start free and upgrade when you're ready to unlock advanced features.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Free Plan -->
+                <div class="trade-card rounded-2xl p-8 border border-dark-border">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Free</h3>
+                        <div class="text-5xl font-bold mb-2">$0</div>
+                        <div class="text-gray-400">Forever</div>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Up to 100 trades</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Basic analytics</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Manual trade entry</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Basic PDF reports</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-times text-red-400 mr-3"></i>
+                            <span class="text-gray-400">AI insights</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-times text-red-400 mr-3"></i>
+                            <span class="text-gray-400">Broker sync</span>
+                        </li>
+                    </ul>
+                    
+                    <button class="w-full glass-morphism py-4 rounded-lg font-medium border border-electric/30 hover:border-electric hover:bg-electric/5 transition-all">
+                        Get Started Free
+                    </button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="trade-card rounded-2xl p-8 border-2 border-electric relative overflow-hidden">
+                    <div class="absolute top-4 right-4 bg-gradient-to-r from-electric to-cyber px-3 py-1 rounded-full text-sm font-medium">
+                        Most Popular
+                    </div>
+                    
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Pro</h3>
+                        <div class="text-5xl font-bold mb-2">$20</div>
+                        <div class="text-gray-400">per month</div>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Unlimited trades</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Advanced analytics</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>AI insights (10/month)</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Broker API sync</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Custom reports</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-400 mr-3"></i>
+                            <span>Priority support</span>
+                        </li>
+                    </ul>
+                    
+                    <button class="w-full bg-gradient-to-r from-electric to-cyber py-4 rounded-lg font-medium neon-glow transition-all hover:scale-105">
+                        Start Pro Trial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: PricingSection -->
+
+    <!-- @COMPONENT: Footer -->
+    <!-- Footer -->
+    <footer class="py-16 border-t border-dark-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="text-2xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent mb-4">
+                        TradeZella Pro
+                    </div>
+                    <p class="text-gray-400 max-w-md">
+                        The most advanced trading journal platform with AI insights and 3D analytics to help you become a consistently profitable trader.
+                    </p>
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-electric transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-electric transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-electric transition-colors">
+                            <i class="fab fa-discord text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">API</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Integrations</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Status</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Community</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-dark-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 TradeZella Pro. All rights reserved.
+                </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <!-- Quick Action Button -->
+    <button class="fixed bottom-8 right-8 bg-gradient-to-r from-electric to-cyber w-16 h-16 rounded-full shadow-xl neon-glow z-50 flex items-center justify-center transition-all hover:scale-110"
+            data-implementation="Should expand into trade logging form">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        
+        // Mobile menu toggle
+        (function() {
+            const mobileMenuButton = document.querySelector('button.md\\:hidden');
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', function() {
+                    // TODO: Toggle mobile menu
+                    console.log('Mobile menu toggle clicked');
+                });
+            }
+        })();
+
+        // Smooth scrolling for navigation links
+        (function() {
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        })();
+
+        // Form validation placeholder
+        (function() {
+            const tradeForm = document.querySelector('form[data-implementation]');
+            if (tradeForm) {
+                tradeForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // TODO: Implement form validation and submission
+                    console.log('Trade form submitted');
+                    alert('Trade logged successfully! (Demo mode)');
+                });
+            }
+        })();
+
+        // Quick action button
+        (function() {
+            const quickActionButton = document.querySelector('.fixed.bottom-8');
+            if (quickActionButton) {
+                quickActionButton.addEventListener('click', function() {
+                    // TODO: Expand into trade logging form or scroll to trade section
+                    document.getElementById('trades').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        })();
+
+        // Animate elements on scroll
+        (function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe trade cards and other elements
+            const animatedElements = document.querySelectorAll('.trade-card');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        })();
+    </script>
+</body>
+</html>

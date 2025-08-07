@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeZella Pro - Advanced Trading Journal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'navy': '#0A0F24',
+                        'electric': '#00D1FF',
+                        'cyber': '#7B2DFF',
+                        'neon-green': '#39FF14',
+                        'glass': 'rgba(255, 255, 255, 0.1)',
+                        'glass-border': 'rgba(255, 255, 255, 0.2)'
+                    },
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'float': 'float 3s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #00D1FF, 0 0 10px #00D1FF, 0 0 15px #00D1FF' },
+                            '100%': { boxShadow: '0 0 10px #00D1FF, 0 0 20px #00D1FF, 0 0 30px #00D1FF' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0px)', opacity: '1' }
+                        }
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0A0F24 0%, #1a1f3a 50%, #2a2f4a 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-border {
+            border: 1px solid transparent;
+            background: linear-gradient(45deg, #00D1FF, #7B2DFF) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+        }
+        .chart-glow {
+            filter: drop-shadow(0 0 10px #00D1FF);
+        }
+    </style>
+</head>
+<body class="bg-navy text-white overflow-x-hidden">
+
+    <!-- @COMPONENT: NavigationHeader -->
+    <nav class="fixed top-0 w-full z-50 glass-effect">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-electric to-cyber rounded-lg flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">TradeZella Pro</span>
+                </div>
+                
+                <div class="hidden md:flex space-x-6">
+                    <a href="#dashboard" class="nav-link text-electric hover:text-white transition-colors">Dashboard</a>
+                    <a href="#journal" class="nav-link text-gray-300 hover:text-white transition-colors">Journal</a>
+                    <a href="#analytics" class="nav-link text-gray-300 hover:text-white transition-colors">Analytics</a>
+                    <a href="#settings" class="nav-link text-gray-300 hover:text-white transition-colors">Settings</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Profile Dropdown -->
+                    <div class="relative" data-mock="true">
+                        <button class="flex items-center space-x-2 glass-effect px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all">
+                            <!-- Professional trader portrait -->
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" 
+                                 alt="Trader profile" class="w-8 h-8 rounded-full object-cover">
+                            <span class="hidden md:block">Alex Chen</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: NavigationHeader -->
+
+    <!-- @COMPONENT: LandingHero -->
+    <section class="pt-20 pb-16 px-4 min-h-screen flex items-center">
+        <div class="container mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8 animate-slide-up">
+                    <div class="space-y-4">
+                        <h1 class="text-5xl lg:text-7xl font-bold leading-tight">
+                            <span class="bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">Master</span>
+                            <br>Your Trading<br>
+                            <span class="bg-gradient-to-r from-cyber to-neon-green bg-clip-text text-transparent">Journey</span>
+                        </h1>
+                        <p class="text-xl text-gray-300 max-w-lg">
+                            Transform your trading with AI-powered insights, comprehensive analytics, and seamless journal tracking. Join 50K+ profitable traders.
+                        </p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="bg-gradient-to-r from-electric to-cyber px-8 py-4 rounded-xl font-semibold hover:animate-glow transition-all transform hover:scale-105" data-implementation="Should redirect to signup flow">
+                            Start Free Trial
+                        </button>
+                        <button class="glass-effect px-8 py-4 rounded-xl font-semibold hover:bg-opacity-20 transition-all">
+                            View Demo
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-8 pt-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-electric">50K+</div>
+                            <div class="text-sm text-gray-400">Active Traders</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-cyber">$2.5M+</div>
+                            <div class="text-sm text-gray-400">Profits Tracked</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-neon-green">99.9%</div>
+                            <div class="text-sm text-gray-400">Uptime</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative animate-float">
+                    <!-- 3D Trading dashboard mockup -->
+                    <div class="glass-effect rounded-2xl p-6 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                        <!-- Futuristic dashboard interface with glass morphism -->
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop" 
+                             alt="Futuristic trading dashboard interface" 
+                             class="rounded-xl w-full">
+                        
+                        <!-- Floating widgets overlay -->
+                        <div class="absolute -bottom-4 -right-4 glass-effect rounded-lg p-4 animate-pulse">
+                            <div class="text-neon-green font-mono text-sm">+$2,347.50</div>
+                            <div class="text-xs text-gray-400">Today's P&L</div>
+                        </div>
+                        
+                        <div class="absolute -top-4 -left-4 glass-effect rounded-lg p-4">
+                            <div class="text-cyber font-mono text-sm">87.3%</div>
+                            <div class="text-xs text-gray-400">Win Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: LandingHero -->
+
+    <!-- @COMPONENT: MainDashboard -->
+    <section class="py-16 px-4" id="dashboard">
+        <div class="container mx-auto">
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4">
+                    <span class="bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">Your Trading Command Center</span>
+                </h2>
+                <p class="text-gray-300 text-lg max-w-2xl mx-auto">Monitor performance, analyze patterns, and optimize your trading strategy with real-time insights.</p>
+            </div>
+
+            <!-- @COMPONENT: QuickStatsGrid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- @MAP: stats.map(stat => ( -->
+                <div class="glass-effect rounded-xl p-6 hover:bg-opacity-20 transition-all transform hover:scale-105 cursor-pointer" data-mock="true">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-electric to-cyber rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                        <span class="text-neon-green text-sm font-mono">+12.5%</span>
+                    </div>
+                    <div class="font-mono text-2xl text-white mb-2">$24,567.89</div>
+                    <div class="text-sm text-gray-400">Total P&L</div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-3">
+                        <div class="bg-gradient-to-r from-electric to-neon-green h-2 rounded-full w-3/4"></div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-xl p-6 hover:bg-opacity-20 transition-all transform hover:scale-105 cursor-pointer" data-mock="true">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-cyber to-electric rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bullseye text-white"></i>
+                        </div>
+                        <span class="text-neon-green text-sm font-mono">↑ 2.3%</span>
+                    </div>
+                    <div class="font-mono text-2xl text-white mb-2">73.8%</div>
+                    <div class="text-sm text-gray-400">Win Rate</div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-3">
+                        <div class="bg-gradient-to-r from-cyber to-neon-green h-2 rounded-full w-4/5"></div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-xl p-6 hover:bg-opacity-20 transition-all transform hover:scale-105 cursor-pointer" data-mock="true">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-neon-green to-electric rounded-lg flex items-center justify-center">
+                            <i class="fas fa-clock text-white"></i>
+                        </div>
+                        <span class="text-electric text-sm font-mono">45m</span>
+                    </div>
+                    <div class="font-mono text-2xl text-white mb-2">2.4</div>
+                    <div class="text-sm text-gray-400">Avg Hold Time</div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-3">
+                        <div class="bg-gradient-to-r from-neon-green to-electric h-2 rounded-full w-1/2"></div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-xl p-6 hover:bg-opacity-20 transition-all transform hover:scale-105 cursor-pointer" data-mock="true">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-electric to-cyber rounded-lg flex items-center justify-center">
+                            <i class="fas fa-fire text-white"></i>
+                        </div>
+                        <span class="text-neon-green text-sm font-mono">🔥</span>
+                    </div>
+                    <div class="font-mono text-2xl text-white mb-2">12</div>
+                    <div class="text-sm text-gray-400">Day Streak</div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-3">
+                        <div class="bg-gradient-to-r from-electric to-cyber h-2 rounded-full w-3/4"></div>
+                    </div>
+                </div>
+                <!-- @END_MAP -->
+            </div>
+            <!-- @END_COMPONENT: QuickStatsGrid -->
+
+            <!-- @COMPONENT: ChartsAndAnalytics -->
+            <div class="grid lg:grid-cols-3 gap-8 mb-12">
+                <!-- Portfolio Performance Chart -->
+                <div class="lg:col-span-2 glass-effect rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-semibold">Portfolio Performance</h3>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 rounded-lg text-sm bg-electric text-navy font-medium">1D</button>
+                            <button class="px-3 py-1 rounded-lg text-sm text-gray-400 hover:text-white">1W</button>
+                            <button class="px-3 py-1 rounded-lg text-sm text-gray-400 hover:text-white">1M</button>
+                            <button class="px-3 py-1 rounded-lg text-sm text-gray-400 hover:text-white">1Y</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 3D animated trading chart -->
+                    <div class="relative h-64 chart-glow">
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=300&fit=crop" 
+                             alt="3D animated trading performance chart with glowing effects" 
+                             class="w-full h-full object-cover rounded-lg opacity-80">
+                        <!-- TODO: Replace with Three.js 3D chart implementation -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent rounded-lg"></div>
+                        <div class="absolute bottom-4 left-4 text-neon-green font-mono">
+                            <div class="text-2xl font-bold">+$2,847.32</div>
+                            <div class="text-sm opacity-80">Today's Gain</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Insights Panel -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-brain text-cyber mr-2"></i>
+                        AI Insights
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-gradient-to-r from-cyber/20 to-electric/20 rounded-lg border border-cyber/30" data-mock="true">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-cyber rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-lightbulb text-white text-xs"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-cyber mb-1">Pattern Recognition</div>
+                                    <div class="text-xs text-gray-300">Your TSLA trades perform 23% better during market open. Consider timing optimization.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gradient-to-r from-electric/20 to-neon-green/20 rounded-lg border border-electric/30" data-mock="true">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-electric rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-chart-bar text-white text-xs"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-electric mb-1">Risk Management</div>
+                                    <div class="text-xs text-gray-300">Revenge trades show 31% lower success rate. Stick to your plan!</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gradient-to-r from-neon-green/20 to-cyber/20 rounded-lg border border-neon-green/30" data-mock="true">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-neon-green rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-target text-navy text-xs"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-neon-green mb-1">Strategy Optimization</div>
+                                    <div class="text-xs text-gray-300">EMA crossover strategy shows highest RRR (1:2.8) in trending markets.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="w-full mt-4 px-4 py-2 rounded-lg border border-electric text-electric hover:bg-electric hover:text-navy transition-all" data-implementation="Should expand AI insights modal">
+                        View All Insights
+                    </button>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: ChartsAndAnalytics -->
+
+            <!-- @COMPONENT: RecentTradesTable -->
+            <div class="glass-effect rounded-xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold">Recent Trades</h3>
+                    <div class="flex space-x-2">
+                        <button class="glass-effect px-4 py-2 rounded-lg text-sm hover:bg-opacity-20 transition-all">
+                            <i class="fas fa-filter mr-2"></i>Filter
+                        </button>
+                        <button class="bg-gradient-to-r from-electric to-cyber px-4 py-2 rounded-lg text-sm hover:animate-glow transition-all" data-implementation="Should open trade logging modal">
+                            <i class="fas fa-plus mr-2"></i>Log Trade
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full" data-mock="true">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Symbol</th>
+                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Type</th>
+                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Entry</th>
+                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Exit</th>
+                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">P&L</th>
+                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Date</th>
+                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- @MAP: trades.map(trade => ( -->
+                            <tr class="border-b border-gray-800 hover:bg-glass transition-colors">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-gradient-to-r from-electric to-cyber rounded-full flex items-center justify-center">
+                                            <span class="text-xs font-bold">TSLA</span>
+                                        </div>
+                                        <div>
+                                            <div class="font-medium">Tesla Inc</div>
+                                            <div class="text-xs text-gray-400">NASDAQ</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">
+                                    <span class="px-2 py-1 bg-neon-green/20 text-neon-green rounded-full text-xs font-medium">LONG</span>
+                                </td>
+                                <td class="py-4 px-4 font-mono text-sm">$248.50</td>
+                                <td class="py-4 px-4 font-mono text-sm">$252.80</td>
+                                <td class="py-4 px-4 font-mono text-sm text-neon-green">+$430.00</td>
+                                <td class="py-4 px-4 text-sm text-gray-400">Dec 15, 2023</td>
+                                <td class="py-4 px-4">
+                                    <div class="flex space-x-2">
+                                        <button class="w-8 h-8 glass-effect rounded-lg hover:bg-electric hover:text-navy transition-all flex items-center justify-center">
+                                            <i class="fas fa-eye text-xs"></i>
+                                        </button>
+                                        <button class="w-8 h-8 glass-effect rounded-lg hover:bg-cyber hover:text-white transition-all flex items-center justify-center">
+                                            <i class="fas fa-edit text-xs"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="border-b border-gray-800 hover:bg-glass transition-colors">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-gradient-to-r from-cyber to-electric rounded-full flex items-center justify-center">
+                                            <span class="text-xs font-bold">AAPL</span>
+                                        </div>
+                                        <div>
+                                            <div class="font-medium">Apple Inc</div>
+                                            <div class="text-xs text-gray-400">NASDAQ</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">
+                                    <span class="px-2 py-1 bg-red-500/20 text-red-400 rounded-full text-xs font-medium">SHORT</span>
+                                </td>
+                                <td class="py-4 px-4 font-mono text-sm">$195.20</td>
+                                <td class="py-4 px-4 font-mono text-sm">$198.50</td>
+                                <td class="py-4 px-4 font-mono text-sm text-red-400">-$165.00</td>
+                                <td class="py-4 px-4 text-sm text-gray-400">Dec 14, 2023</td>
+                                <td class="py-4 px-4">
+                                    <div class="flex space-x-2">
+                                        <button class="w-8 h-8 glass-effect rounded-lg hover:bg-electric hover:text-navy transition-all flex items-center justify-center">
+                                            <i class="fas fa-eye text-xs"></i>
+                                        </button>
+                                        <button class="w-8 h-8 glass-effect rounded-lg hover:bg-cyber hover:text-white transition-all flex items-center justify-center">
+                                            <i class="fas fa-edit text-xs"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- @END_MAP -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-800">
+                    <div class="text-sm text-gray-400">Showing 2 of 156 trades</div>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-2 glass-effect rounded-lg text-sm hover:bg-opacity-20 transition-all">Previous</button>
+                        <button class="px-3 py-2 bg-electric text-navy rounded-lg text-sm font-medium">1</button>
+                        <button class="px-3 py-2 glass-effect rounded-lg text-sm hover:bg-opacity-20 transition-all">2</button>
+                        <button class="px-3 py-2 glass-effect rounded-lg text-sm hover:bg-opacity-20 transition-all">Next</button>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: RecentTradesTable -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: MainDashboard -->
+
+    <!-- @COMPONENT: TradeJournalInterface -->
+    <section class="py-16 px-4" id="journal">
+        <div class="container mx-auto">
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4">
+                    <span class="bg-gradient-to-r from-cyber to-neon-green bg-clip-text text-transparent">Smart Trade Journal</span>
+                </h2>
+                <p class="text-gray-300 text-lg max-w-2xl mx-auto">Log trades with intelligent autofill, emotion tracking, and screenshot annotation for complete trade analysis.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Trade Logging Form -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-plus-circle text-electric mr-2"></i>
+                        Log New Trade
+                    </h3>
+
+                    <form class="space-y-6" data-mock="true">
+                        <!-- Symbol Input with Autofill -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Symbol</label>
+                            <div class="relative">
+                                <input type="text" 
+                                       class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none transition-colors" 
+                                       placeholder="TSLA" 
+                                       data-implementation="Should trigger autofill API">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <i class="fas fa-search text-gray-400"></i>
+                                </div>
+                            </div>
+                            <!-- Smart Autofill Results -->
+                            <div class="mt-2 p-3 glass-effect rounded-lg text-sm text-gray-300" data-mock="true">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-electric">TSLA</span>
+                                    <span>Tesla Inc - $252.80</span>
+                                </div>
+                                <div class="text-xs text-gray-400">Avg Volume: 45.2M | Volatility: High</div>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Trade Type</label>
+                                <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                    <option>Long</option>
+                                    <option>Short</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Quantity</label>
+                                <input type="number" 
+                                       class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none" 
+                                       placeholder="100">
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Entry Price</label>
+                                <input type="number" 
+                                       step="0.01"
+                                       class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none" 
+                                       placeholder="248.50">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Exit Price</label>
+                                <input type="number" 
+                                       step="0.01"
+                                       class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none" 
+                                       placeholder="252.80">
+                            </div>
+                        </div>
+
+                        <!-- Emotion Slider -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Trading Mood</label>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>😡 Panicked</span>
+                                    <span>😐 Neutral</span>
+                                    <span>😌 Confident</span>
+                                </div>
+                                <input type="range" min="1" max="5" value="3" 
+                                       class="w-full h-2 bg-gray-700 rounded-lg appearance-none slider-thumb">
+                            </div>
+                        </div>
+
+                        <!-- Tags -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Tags</label>
+                            <div class="flex flex-wrap gap-2 mb-2" data-mock="true">
+                                <span class="px-3 py-1 bg-electric/20 text-electric rounded-full text-sm">EMA Breakout</span>
+                                <span class="px-3 py-1 bg-cyber/20 text-cyber rounded-full text-sm">Morning Session</span>
+                                <span class="px-3 py-1 bg-neon-green/20 text-neon-green rounded-full text-sm">High Volume</span>
+                            </div>
+                            <input type="text" 
+                                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none" 
+                                   placeholder="Add tags (e.g., breakout, reversal)">
+                        </div>
+
+                        <!-- Journal Entry -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Trade Notes</label>
+                            <textarea 
+                                class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none h-24 resize-none" 
+                                placeholder="What was your reasoning? How did you feel? What would you do differently?"></textarea>
+                        </div>
+
+                        <!-- Screenshot Upload -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Chart Screenshot</label>
+                            <div class="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-electric transition-colors cursor-pointer" data-implementation="Should handle file upload">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-400">Drop your chart screenshot here or click to upload</p>
+                                <p class="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-4">
+                            <button type="submit" 
+                                    class="flex-1 bg-gradient-to-r from-electric to-cyber px-6 py-3 rounded-lg font-semibold hover:animate-glow transition-all">
+                                Save Trade
+                            </button>
+                            <button type="button" 
+                                    class="px-6 py-3 glass-effect rounded-lg font-semibold hover:bg-opacity-20 transition-all">
+                                Draft
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Trade Analysis Preview -->
+                <div class="space-y-6">
+                    <!-- Performance Heatmap -->
+                    <div class="glass-effect rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-6">Performance Heatmap</h3>
+                        <!-- Trading performance heatmap visualization -->
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop" 
+                                 alt="Trading performance heatmap with color-coded profit/loss zones" 
+                                 class="w-full rounded-lg opacity-90">
+                            <!-- TODO: Replace with D3.js interactive heatmap -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent rounded-lg"></div>
+                        </div>
+                        <div class="flex justify-between mt-4 text-sm">
+                            <div class="text-center">
+                                <div class="text-red-400 font-mono">-2.5%</div>
+                                <div class="text-gray-400">Worst Day</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-gray-300 font-mono">0.8%</div>
+                                <div class="text-gray-400">Average</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-neon-green font-mono">+4.2%</div>
+                                <div class="text-gray-400">Best Day</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strategy Breakdown -->
+                    <div class="glass-effect rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-6">Strategy Breakdown</h3>
+                        <div class="space-y-4" data-mock="true">
+                            <div class="flex items-center justify-between p-3 bg-gradient-to-r from-electric/10 to-cyber/10 rounded-lg border border-electric/20">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-electric rounded-full"></div>
+                                    <span class="font-medium">EMA Crossover</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-electric font-mono">+$2,340</div>
+                                    <div class="text-xs text-gray-400">68% Win Rate</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gradient-to-r from-cyber/10 to-neon-green/10 rounded-lg border border-cyber/20">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-cyber rounded-full"></div>
+                                    <span class="font-medium">Support/Resistance</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-cyber font-mono">+$1,890</div>
+                                    <div class="text-xs text-gray-400">72% Win Rate</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gradient-to-r from-neon-green/10 to-electric/10 rounded-lg border border-neon-green/20">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-neon-green rounded-full"></div>
+                                    <span class="font-medium">Breakout Trading</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-neon-green font-mono">+$1,234</div>
+                                    <div class="text-xs text-gray-400">59% Win Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="glass-effect rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-6">Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="p-4 glass-effect rounded-lg text-center hover:bg-opacity-20 transition-all">
+                                <i class="fas fa-download text-electric text-2xl mb-2"></i>
+                                <div class="text-sm font-medium">Export Data</div>
+                            </button>
+                            <button class="p-4 glass-effect rounded-lg text-center hover:bg-opacity-20 transition-all">
+                                <i class="fas fa-share text-cyber text-2xl mb-2"></i>
+                                <div class="text-sm font-medium">Share Report</div>
+                            </button>
+                            <button class="p-4 glass-effect rounded-lg text-center hover:bg-opacity-20 transition-all">
+                                <i class="fas fa-cog text-neon-green text-2xl mb-2"></i>
+                                <div class="text-sm font-medium">Settings</div>
+                            </button>
+                            <button class="p-4 glass-effect rounded-lg text-center hover:bg-opacity-20 transition-all">
+                                <i class="fas fa-question-circle text-electric text-2xl mb-2"></i>
+                                <div class="text-sm font-medium">Help</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: TradeJournalInterface -->
+
+    <!-- @COMPONENT: AnalyticsHub -->
+    <section class="py-16 px-4" id="analytics">
+        <div class="container mx-auto">
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4">
+                    <span class="bg-gradient-to-r from-electric to-neon-green bg-clip-text text-transparent">Advanced Analytics</span>
+                </h2>
+                <p class="text-gray-300 text-lg max-w-2xl mx-auto">Deep dive into your trading patterns with correlation analysis, strategy optimization, and predictive insights.</p>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="glass-effect rounded-xl p-6 mb-8">
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex-1 min-w-48">
+                        <input type="text" 
+                               placeholder="Filter by symbol, strategy, or tag..."
+                               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:border-electric focus:outline-none">
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <select class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 focus:border-electric focus:outline-none">
+                            <option>All Time</option>
+                            <option>Last 30 Days</option>
+                            <option>Last 90 Days</option>
+                            <option>This Year</option>
+                        </select>
+                        
+                        <select class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 focus:border-electric focus:outline-none">
+                            <option>All Strategies</option>
+                            <option>EMA Crossover</option>
+                            <option>Support/Resistance</option>
+                            <option>Breakout</option>
+                        </select>
+                        
+                        <button class="px-4 py-2 bg-gradient-to-r from-electric to-cyber rounded-lg hover:animate-glow transition-all">
+                            <i class="fas fa-search mr-2"></i>Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8 mb-8">
+                <!-- Correlation Matrix -->
+                <div class="lg:col-span-2 glass-effect rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-6">Strategy Correlation Matrix</h3>
+                    <!-- Interactive correlation matrix visualization -->
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" 
+                             alt="Interactive correlation matrix showing trading strategy relationships" 
+                             class="w-full rounded-lg opacity-90">
+                        <!-- TODO: Implement D3.js correlation matrix -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-electric/10 via-transparent to-cyber/10 rounded-lg"></div>
+                        
+                        <!-- Correlation Legend -->
+                        <div class="absolute top-4 right-4 glass-effect rounded-lg p-3">
+                            <div class="text-xs font-medium mb-2">Correlation</div>
+                            <div class="flex items-center space-x-2 text-xs">
+                                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                <span>-1.0</span>
+                                <div class="w-8 h-1 bg-gradient-to-r from-red-500 via-yellow-500 to-neon-green rounded"></div>
+                                <span>+1.0</span>
+                                <div class="w-3 h-3 bg-neon-green rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-sm text-gray-300">
+                        <p><i class="fas fa-info-circle text-electric mr-2"></i>
+                        Strong positive correlation (0.87) between EMA crossover and high volume days suggests timing optimization opportunities.</p>
+                    </div>
+                </div>
+
+                <!-- Key Metrics Panel -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-6">Key Metrics</h3>
+                    <div class="space-y-6">
+                        <!-- Sharpe Ratio -->
+                        <div class="text-center" data-mock="true">
+                            <div class="text-3xl font-mono text-electric mb-2">2.34</div>
+                            <div class="text-sm text-gray-400 mb-2">Sharpe Ratio</div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-electric to-cyber h-2 rounded-full w-4/5"></div>
+                            </div>
+                            <div class="text-xs text-neon-green mt-1">Excellent</div>
+                        </div>
+
+                        <!-- Maximum Drawdown -->
+                        <div class="text-center" data-mock="true">
+                            <div class="text-3xl font-mono text-cyber mb-2">-8.2%</div>
+                            <div class="text-sm text-gray-400 mb-2">Max Drawdown</div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-neon-green to-electric h-2 rounded-full w-3/4"></div>
+                            </div>
+                            <div class="text-xs text-electric mt-1">Manageable</div>
+                        </div>
+
+                        <!-- Profit Factor -->
+                        <div class="text-center" data-mock="true">
+                            <div class="text-3xl font-mono text-neon-green mb-2">1.87</div>
+                            <div class="text-sm text-gray-400 mb-2">Profit Factor</div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-cyber to-neon-green h-2 rounded-full w-4/5"></div>
+                            </div>
+                            <div class="text-xs text-neon-green mt-1">Strong</div>
+                        </div>
+
+                        <!-- Calmar Ratio -->
+                        <div class="text-center" data-mock="true">
+                            <div class="text-3xl font-mono text-electric mb-2">0.94</div>
+                            <div class="text-sm text-gray-400 mb-2">Calmar Ratio</div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-electric to-cyber h-2 rounded-full w-3/4"></div>
+                            </div>
+                            <div class="text-xs text-cyber mt-1">Good</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Analysis Tools -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Monte Carlo Simulation -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-dice text-cyber mr-2"></i>
+                        Monte Carlo Simulation
+                    </h3>
+                    <!-- Monte Carlo results visualization -->
+                    <div class="relative h-48 mb-4">
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=200&fit=crop" 
+                             alt="Monte Carlo simulation results showing potential future performance paths" 
+                             class="w-full h-full object-cover rounded-lg opacity-80">
+                        <!-- TODO: Replace with Chart.js Monte Carlo visualization -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent rounded-lg"></div>
+                        <div class="absolute bottom-2 left-2 text-xs">
+                            <div class="text-neon-green">95% Confidence</div>
+                            <div class="text-gray-400">1000 Simulations</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 text-center text-sm" data-mock="true">
+                        <div>
+                            <div class="font-mono text-red-400">-$1,250</div>
+                            <div class="text-gray-400">5th Percentile</div>
+                        </div>
+                        <div>
+                            <div class="font-mono text-electric">+$3,890</div>
+                            <div class="text-gray-400">50th Percentile</div>
+                        </div>
+                        <div>
+                            <div class="font-mono text-neon-green">+$8,940</div>
+                            <div class="text-gray-400">95th Percentile</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Analysis -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-shield-alt text-electric mr-2"></i>
+                        Risk Analysis
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <!-- VaR Analysis -->
+                        <div class="p-4 bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-lg border border-red-500/20" data-mock="true">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium">Value at Risk (95%)</span>
+                                <span class="font-mono text-red-400">-$847</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full w-1/4"></div>
+                            </div>
+                        </div>
+
+                        <!-- Expected Shortfall -->
+                        <div class="p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-lg border border-yellow-500/20" data-mock="true">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium">Expected Shortfall</span>
+                                <span class="font-mono text-yellow-400">-$1,234</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-yellow-500 to-orange-500 h-2 rounded-full w-1/3"></div>
+                            </div>
+                        </div>
+
+                        <!-- Beta Analysis -->
+                        <div class="p-4 bg-gradient-to-r from-electric/10 to-cyber/10 rounded-lg border border-electric/20" data-mock="true">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium">Portfolio Beta</span>
+                                <span class="font-mono text-electric">0.87</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-electric to-cyber h-2 rounded-full w-4/5"></div>
+                            </div>
+                            <div class="text-xs text-gray-400 mt-2">Moderate correlation with market</div>
+                        </div>
+
+                        <!-- Volatility Clustering -->
+                        <div class="p-4 bg-gradient-to-r from-cyber/10 to-neon-green/10 rounded-lg border border-cyber/20" data-mock="true">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium">Volatility Regime</span>
+                                <span class="font-mono text-cyber">Medium</span>
+                            </div>
+                            <div class="text-xs text-gray-400">Current market volatility suggests moderate position sizing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: AnalyticsHub -->
+
+    <!-- @COMPONENT: UserProfile -->
+    <section class="py-16 px-4" id="settings">
+        <div class="container mx-auto max-w-4xl">
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4">
+                    <span class="bg-gradient-to-r from-cyber to-electric bg-clip-text text-transparent">Profile Settings</span>
+                </h2>
+                <p class="text-gray-300 text-lg">Manage your account, preferences, and trading configuration.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Profile Overview -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="text-center mb-6">
+                        <div class="relative inline-block">
+                            <!-- Professional trader profile photo -->
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face" 
+                                 alt="Professional trader profile" 
+                                 class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-electric">
+                            <button class="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-r from-electric to-cyber rounded-full flex items-center justify-center hover:animate-glow transition-all" data-implementation="Should trigger file upload modal">
+                                <i class="fas fa-camera text-white text-xs"></i>
+                            </button>
+                        </div>
+                        <h3 class="text-xl font-semibold mt-4" data-bind="user.name">Alex Chen</h3>
+                        <p class="text-gray-400" data-bind="user.title">Swing Trader</p>
+                        <div class="flex items-center justify-center space-x-2 mt-2">
+                            <div class="w-3 h-3 bg-neon-green rounded-full animate-pulse"></div>
+                            <span class="text-sm text-neon-green">Online</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4" data-mock="true">
+                        <div class="flex justify-between items-center p-3 glass-effect rounded-lg">
+                            <span class="text-sm">Plan</span>
+                            <span class="px-2 py-1 bg-gradient-to-r from-electric to-cyber text-xs rounded-full">Pro</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 glass-effect rounded-lg">
+                            <span class="text-sm">Member Since</span>
+                            <span class="text-sm text-gray-400">Jan 2023</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 glass-effect rounded-lg">
+                            <span class="text-sm">Total Trades</span>
+                            <span class="text-sm text-electric font-mono">1,247</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 glass-effect rounded-lg">
+                            <span class="text-sm">Success Rate</span>
+                            <span class="text-sm text-neon-green font-mono">73.8%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Form -->
+                <div class="lg:col-span-2 glass-effect rounded-xl p-6">
+                    <div class="mb-6">
+                        <nav class="flex space-x-8">
+                            <button class="pb-2 border-b-2 border-electric text-electric">General</button>
+                            <button class="pb-2 text-gray-400 hover:text-white transition-colors">Trading</button>
+                            <button class="pb-2 text-gray-400 hover:text-white transition-colors">Notifications</button>
+                            <button class="pb-2 text-gray-400 hover:text-white transition-colors">Security</button>
+                        </nav>
+                    </div>
+
+                    <form class="space-y-6" data-mock="true">
+                        <!-- Personal Information -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4">Personal Information</h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">First Name</label>
+                                    <input type="text" 
+                                           value="Alex" 
+                                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Last Name</label>
+                                    <input type="text" 
+                                           value="Chen" 
+                                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4">Contact Information</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Email Address</label>
+                                    <input type="email" 
+                                           value="alex.chen@example.com" 
+                                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Phone Number</label>
+                                    <input type="tel" 
+                                           value="+1 (555) 123-4567" 
+                                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trading Preferences -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4">Trading Preferences</h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Primary Broker</label>
+                                    <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                        <option>TradingView</option>
+                                        <option>Interactive Brokers</option>
+                                        <option>TD Ameritrade</option>
+                                        <option>E*TRADE</option>
+                                        <option>Custom/Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Trading Style</label>
+                                    <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                        <option>Swing Trading</option>
+                                        <option>Day Trading</option>
+                                        <option>Scalping</option>
+                                        <option>Position Trading</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risk Management -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4">Risk Management</h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Max Risk Per Trade (%)</label>
+                                    <input type="number" 
+                                           step="0.1"
+                                           value="2.0" 
+                                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Max Daily Drawdown (%)</label>
+                                    <input type="number" 
+                                           step="0.1"
+                                           value="5.0" 
+                                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:border-electric focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-4 pt-6 border-t border-gray-700">
+                            <button type="submit" 
+                                    class="flex-1 bg-gradient-to-r from-electric to-cyber px-6 py-3 rounded-lg font-semibold hover:animate-glow transition-all" 
+                                    data-implementation="Should validate and update user profile">
+                                Save Changes
+                            </button>
+                            <button type="button" 
+                                    class="px-6 py-3 glass-effect rounded-lg font-semibold hover:bg-opacity-20 transition-all">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: UserProfile -->
+
+    <!-- @COMPONENT: Footer -->
+    <footer class="py-12 px-4 border-t border-gray-800 mt-16">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-electric to-cyber rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-electric to-cyber bg-clip-text text-transparent">TradeZella Pro</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">Empowering traders with AI-driven insights and comprehensive analytics since 2023.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Platform</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-electric transition-colors">Dashboard</a></li>
+                        <li><a href="#" class="hover:text-electric transition-colors">Trade Journal</a></li>
+                        <li><a href="#" class="hover:text-electric transition-colors">Analytics</a></li>
+                        <li><a href="#" class="hover:text-electric transition-colors">Mobile App</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-electric transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-electric transition-colors">API Documentation</a></li>
+                        <li><a href="#" class="hover:text-electric transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-electric transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 glass-effect rounded-lg flex items-center justify-center hover:bg-electric hover:text-navy transition-all">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 glass-effect rounded-lg flex items-center justify-center hover:bg-electric hover:text-navy transition-all">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 glass-effect rounded-lg flex items-center justify-center hover:bg-electric hover:text-navy transition-all">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 glass-effect rounded-lg flex items-center justify-center hover:bg-electric hover:text-navy transition-all">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2023 TradeZella Pro. All rights reserved. Built with ❤️ for traders worldwide.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <!-- @COMPONENT: FloatingTradeButton -->
+    <button class="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-r from-electric to-cyber rounded-full flex items-center justify-center shadow-2xl hover:animate-glow transition-all z-40 transform hover:scale-110" data-implementation="Should open quick trade logging modal">
+        <i class="fas fa-plus text-white text-xl"></i>
+    </button>
+    <!-- @END_COMPONENT: FloatingTradeButton -->
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        // IIFE to avoid polluting global namespace
+        (function() {
+            // TODO: Implement business logic, API calls, and state management
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Simulate real-time data updates (mockup only)
+            function simulateDataUpdates() {
+                const statElements = document.querySelectorAll('[data-mock="true"] .font-mono');
+                // This would be replaced with actual WebSocket or API polling
+                // setInterval(() => {
+                //     // Update stats with real data
+                // }, 5000);
+            }
+
+            // Initialize mockup interactions
+            simulateDataUpdates();
+        })();
+    </script>
+</body>
+</html>
