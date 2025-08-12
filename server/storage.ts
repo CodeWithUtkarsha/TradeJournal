@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type UpdateUser, type Trade, type InsertTrade } from "@shared/schema";
+import { type User, type InsertUser, type UpdateUser, type Trade, type InsertTrade } from "../shared/schema";
 import { randomUUID } from "crypto";
 import bcrypt from "bcrypt";
 

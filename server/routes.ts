@@ -2,8 +2,8 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import jwt from "jsonwebtoken";
 import { storage } from "./storage";
-import { loginSchema, registerSchema, quickTradeSchema, updateUserSchema } from "@shared/schema";
-import type { User } from "@shared/schema";
+import { loginSchema, registerSchema, quickTradeSchema, updateUserSchema } from "../shared/schema";
+import type { User } from "../shared/schema";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
