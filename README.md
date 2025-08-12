@@ -1,4 +1,4 @@
-# TradeTrack
+# TradeTrack✏️📊📈📉
 
 TradeTrack is a premium trading journal platform inspired by TradeZella. It empowers traders to track, analyze, and optimize their performance using a modern, cyberpunk-themed interface with advanced analytics and AI insights.
 
