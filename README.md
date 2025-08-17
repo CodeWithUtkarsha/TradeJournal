@@ -9,49 +9,55 @@ A modern, professional trading journal platform inspired by TradeZella, built fo
 ## ✨ Key Features
 
 ### 📊 **Performance Matrix**
+
 - Visual heatmap showing daily P&L patterns
 - Real-time data visualization from your trading history
 - Color-coded intensity based on profit/loss magnitude
 
-### 📈 **Analytics Dashboard** 
+### 📈 **Analytics Dashboard**
+
 - Comprehensive trading statistics and insights
 - Performance metrics across different time periods
 - Win rate, profit factor, and risk analytics
 
 ### 💼 **Trade Management**
+
 - Add, edit, and delete trading records with confirmation
 - Detailed trade logging with entry/exit points
 - Stop loss and take profit tracking
 
 ### 📤 **XM Broker Integration**
+
 - **CSV Import**: Upload your XM broker trading history
 - Automatic data parsing and validation
 - Bulk import with duplicate filtering
 
 ### 🔐 **Secure Authentication**
+
 - JWT-based user authentication
 - Protected routes and user sessions
 - Profile management with photo uploads
 
 ### 🎨 **Modern UI/UX**
+
 - Responsive design for desktop and mobile
 - Dark theme with electric blue accents
 - Smooth animations and glass morphism effects
 
 ## 🛠 Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| **React 18** | Frontend framework with TypeScript |
-| **Vite** | Lightning-fast build tool |
-| **TailwindCSS** | Utility-first styling |
-| **ShadCN UI** | Modern component library |
-| **TanStack Query** | Server state management |
-| **Recharts** | Data visualization |
-| **Lucide React** | Beautiful icons |
-| **Node.js** | Backend API server |
-| **Vercel** | Frontend deployment |
-| **Render** | Backend deployment |
+| Technology         | Purpose                            |
+| ------------------ | ---------------------------------- |
+| **React 18**       | Frontend framework with TypeScript |
+| **Vite**           | Lightning-fast build tool          |
+| **TailwindCSS**    | Utility-first styling              |
+| **ShadCN UI**      | Modern component library           |
+| **TanStack Query** | Server state management            |
+| **Recharts**       | Data visualization                 |
+| **Lucide React**   | Beautiful icons                    |
+| **Node.js**        | Backend API server                 |
+| **Vercel**         | Frontend deployment                |
+| **Render**         | Backend deployment                 |
 
 ## 🚀 Quick Start
 
@@ -104,11 +110,13 @@ VITE_API_URL=https://render-backend-tradejournal.onrender.com
 ## 📊 XM Broker Import Guide
 
 1. **Export from XM Platform:**
+
    - Navigate to Account History in your XM platform
    - Select your desired date range
    - Export as CSV format
 
 2. **Import to TradeZella:**
+
    - Click "Import XM Trades" in dashboard
    - Upload your CSV file (drag & drop supported)
    - System automatically validates and imports trades
