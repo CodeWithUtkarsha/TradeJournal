@@ -107,17 +107,6 @@ class TradeService {
     return this.request(`/trades/export?format=${format}`);
   }
 
-  async importTrades(file: File) {
-    const formData = new FormData();
-    formData.append('tradesFile', file);
-    
-    return this.request('/trades/import', {
-      method: 'POST',
-      body: formData,
-      headers: {}, // Let browser set Content-Type for FormData
-    });
-  }
-
   async getPerformanceMetrics(period: string = '30d') {
     return this.request(`/analytics/performance?period=${period}`);
   }

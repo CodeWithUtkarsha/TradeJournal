@@ -1,66 +1,47 @@
-import { useState, useRef } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Upload, FileText, AlertCircle, CheckCircle, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Progress } from "@/components/ui/progress";
-import { tradeService } from "@/lib/tradeService";
+import React, { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { tradeService } from '@/lib/tradeService';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from './ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Upload, FileSpreadsheet, CheckCircle, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from './ui/alert';
 
-interface ImportResult {
-  success: boolean;
-  imported: number;
-  errors: string[];
-  duplicates: number;
+interface TradeImportProps {
+  onImportComplete?: () => void;
 }
 
-export function TradeImport() {
+export default function TradeImport({ onImportComplete }: TradeImportProps) {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
-  const [importResult, setImportResult] = useState<ImportResult | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const importMutation = useMutation({
     mutationFn: (file: File) => tradeService.importTrades(file),
     onSuccess: (result) => {
-      setImportResult(result);
-      // Invalidate trades query to refresh the dashboard
+      toast({
+        title: "Import Successful",
+        description: `Successfully imported ${result.imported || 0} trades from your XM broker data.`,
+      });
       queryClient.invalidateQueries({ queryKey: ['trades'] });
+      queryClient.invalidateQueries({ queryKey: ['performanceMetrics'] });
+      setSelectedFile(null);
+      // Close the modal if callback provided
+      if (onImportComplete) {
+        onImportComplete();
+      }
     },
     onError: (error: any) => {
-      setImportResult({
-        success: false,
-        imported: 0,
-        errors: [error.message || 'Import failed'],
-        duplicates: 0
+      toast({
+        title: "Import Failed",
+        description: error.message || "Failed to import trades. Please check your CSV format.",
+        variant: "destructive",
       });
-    }
+    },
   });
-
-  const handleFileSelect = (file: File) => {
-    if (!file.name.endsWith('.csv')) {
-      setImportResult({
-        success: false,
-        imported: 0,
-        errors: ['Please select a CSV file'],
-        duplicates: 0
-      });
-      return;
-    }
-
-    if (file.size > 10 * 1024 * 1024) { // 10MB limit
-      setImportResult({
-        success: false,
-        imported: 0,
-        errors: ['File size must be less than 10MB'],
-        duplicates: 0
-      });
-      return;
-    }
-
-    setImportResult(null);
-    importMutation.mutate(file);
-  };
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -76,148 +57,161 @@ export function TradeImport() {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-
-    const files = Array.from(e.dataTransfer.files);
-    if (files[0]) {
-      handleFileSelect(files[0]);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+        setSelectedFile(file);
+      } else {
+        toast({
+          title: "Invalid File Type",
+          description: "Please select a CSV file.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
-  const downloadTemplate = () => {
-    // Create CSV template
-    const csvTemplate = `Symbol,Type,Entry Price,Exit Price,Quantity,Lot Size,Entry Time,Exit Time,P&L,Notes,Strategy
-EURUSD,Long,1.0850,1.0920,10000,0.10,2025-01-10 08:30:00,2025-01-10 09:15:00,70.00,Good ECB news,News Trading
-GBPJPY,Short,195.50,194.80,5000,0.05,2025-01-09 14:20:00,2025-01-09 15:45:00,35.00,Resistance held,Support/Resistance`;
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+        setSelectedFile(file);
+      } else {
+        toast({
+          title: "Invalid File Type",
+          description: "Please select a CSV file.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
 
-    const blob = new Blob([csvTemplate], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = 'trade_import_template.csv';
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+  const handleImport = () => {
+    if (selectedFile) {
+      importMutation.mutate(selectedFile);
+    }
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Upload className="h-5 w-5" />
+          <FileSpreadsheet className="w-5 h-5" />
           Import XM Broker Trades
         </CardTitle>
         <CardDescription>
-          Upload your XM broker trade history as a CSV file to import all your real trading data
+          Upload your XM broker trading history CSV file to import all your trades automatically.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Template Download */}
-        <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-          <div className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            <span className="text-sm">Need help formatting your data?</span>
-          </div>
-          <Button variant="outline" size="sm" onClick={downloadTemplate}>
-            <Download className="h-4 w-4 mr-2" />
-            Download Template
-          </Button>
-        </div>
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            <strong>How to export from XM:</strong> Go to your XM trading platform → Account History → Select date range → Export as CSV
+          </AlertDescription>
+        </Alert>
 
-        {/* File Drop Zone */}
-        <div
-          className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-            dragActive 
-              ? 'border-primary bg-primary/5' 
-              : 'border-muted-foreground/25 hover:border-muted-foreground/50'
-          }`}
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
-        >
-          <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <h3 className="text-lg font-medium mb-2">
-            {dragActive ? 'Drop your CSV file here' : 'Upload Trade History'}
-          </h3>
-          <p className="text-muted-foreground mb-4">
-            Drag and drop your XM broker CSV export, or click to browse
-          </p>
-          <Button 
-            variant="outline" 
-            onClick={() => fileInputRef.current?.click()}
-            disabled={importMutation.isPending}
+        <div className="space-y-4">
+          <Label htmlFor="csv-upload">Upload CSV File</Label>
+          
+          <div
+            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+              dragActive
+                ? "border-blue-500 bg-blue-50"
+                : selectedFile
+                ? "border-green-500 bg-green-50"
+                : "border-gray-300 hover:border-gray-400"
+            }`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
           >
-            {importMutation.isPending ? 'Importing...' : 'Choose File'}
-          </Button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".csv"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) handleFileSelect(file);
-            }}
-          />
-        </div>
-
-        {/* Import Progress */}
-        {importMutation.isPending && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm">
-              <span>Processing trades...</span>
-              <span>Please wait</span>
-            </div>
-            <Progress value={undefined} className="w-full" />
-          </div>
-        )}
-
-        {/* Import Results */}
-        {importResult && (
-          <Alert className={importResult.success ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}>
-            {importResult.success ? (
-              <CheckCircle className="h-4 w-4 text-green-600" />
+            {selectedFile ? (
+              <div className="space-y-2">
+                <CheckCircle className="w-8 h-8 text-green-500 mx-auto" />
+                <p className="text-sm font-medium text-green-700">
+                  {selectedFile.name}
+                </p>
+                <p className="text-xs text-green-600">
+                  {(selectedFile.size / 1024).toFixed(1)} KB
+                </p>
+              </div>
             ) : (
-              <AlertCircle className="h-4 w-4 text-red-600" />
-            )}
-            <AlertDescription>
-              {importResult.success ? (
-                <div className="space-y-1">
-                  <p className="font-medium text-green-800">Import Successful!</p>
-                  <p className="text-green-700">
-                    ✅ {importResult.imported} trades imported successfully
-                    {importResult.duplicates > 0 && (
-                      <span className="block">⚠️ {importResult.duplicates} duplicates skipped</span>
-                    )}
+              <div className="space-y-4">
+                <Upload className="w-12 h-12 text-gray-400 mx-auto" />
+                <div>
+                  <p className="text-sm font-medium text-gray-700">
+                    Drag and drop your CSV file here, or
                   </p>
+                  <Input
+                    id="csv-upload"
+                    type="file"
+                    accept=".csv"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                  <Label
+                    htmlFor="csv-upload"
+                    className="inline-flex items-center px-4 py-2 mt-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-300 rounded-md cursor-pointer hover:bg-blue-100"
+                  >
+                    Choose file
+                  </Label>
                 </div>
-              ) : (
-                <div className="space-y-1">
-                  <p className="font-medium text-red-800">Import Failed</p>
-                  <ul className="text-red-700">
-                    {importResult.errors.map((error, index) => (
-                      <li key={index}>• {error}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {/* Instructions */}
-        <div className="text-sm text-muted-foreground space-y-2">
-          <h4 className="font-medium">How to export from XM:</h4>
-          <ol className="list-decimal list-inside space-y-1 ml-2">
-            <li>Log in to your XM client portal</li>
-            <li>Go to "Account History" or "Trade History"</li>
-            <li>Select your date range</li>
-            <li>Click "Export" and choose CSV format</li>
-            <li>Upload the downloaded file here</li>
-          </ol>
+                <p className="text-xs text-gray-500">
+                  CSV files only, up to 10MB
+                </p>
+              </div>
+            )}
+          </div>
         </div>
+
+        <div className="space-y-4">
+          <div className="text-sm text-gray-600">
+            <p className="font-medium mb-2">Expected CSV Format:</p>
+            <div className="bg-gray-50 p-3 rounded text-xs font-mono">
+              Date, Symbol, Action, Volume, Price, S/L, T/P, Profit, Comment
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              onClick={handleImport}
+              disabled={!selectedFile || importMutation.isPending}
+              className="flex-1"
+            >
+              {importMutation.isPending ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Importing...
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4 mr-2" />
+                  Import Trades
+                </>
+              )}
+            </Button>
+            
+            {selectedFile && (
+              <Button
+                variant="outline"
+                onClick={() => setSelectedFile(null)}
+                disabled={importMutation.isPending}
+              >
+                Clear
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <Alert>
+          <CheckCircle className="h-4 w-4" />
+          <AlertDescription>
+            Your trades will be automatically validated and duplicates will be filtered out based on timestamp and order ID.
+          </AlertDescription>
+        </Alert>
       </CardContent>
     </Card>
   );

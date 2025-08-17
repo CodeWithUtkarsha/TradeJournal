@@ -4,13 +4,14 @@ import { auth } from "@/lib/auth";
 import { tradeService } from "@/lib/tradeService";
 import { formatCurrency } from "@/lib/forexCalculations";
 import { ForexMetrics } from "@/components/ForexMetrics";
-import { TradeImport } from "@/components/trade-import";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import TradeModal from "@/components/trade-modal";
+import TradeImport from "@/components/trade-import";
 import type { Trade, User } from "@shared/schema";
-import { ChartLine, Target, Calculator, Scale, Brain, TrendingUp, Trash2 } from "lucide-react";
+import { ChartLine, Target, Calculator, Scale, Brain, TrendingUp, Trash2, FileSpreadsheet } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 // Performance Matrix helper function
@@ -55,6 +56,8 @@ type TimePeriod = '1m' | '3m' | '1y';
 export default function Dashboard() {
   // State for time period selection
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('1m');
+  // State for import modal
+  const [showImportModal, setShowImportModal] = useState(false);
   
   // Get current user
   const { data: currentUser } = useQuery<User | null>({
@@ -332,14 +335,17 @@ export default function Dashboard() {
             </p>
           </div>
           
-          <div className="flex gap-4">
+          <div className="flex gap-3 mt-4 lg:mt-0">
+            <Button
+              onClick={() => setShowImportModal(true)}
+              variant="outline"
+              className="flex items-center gap-2 border-electric-blue text-electric-blue hover:bg-electric-blue hover:text-dark-navy"
+            >
+              <FileSpreadsheet className="w-4 h-4" />
+              Import XM Trades
+            </Button>
             <TradeModal />
           </div>
-        </div>
-
-        {/* Trade Import Section */}
-        <div className="mb-8">
-          <TradeImport />
         </div>
 
         {/* Error Alert */}
@@ -817,6 +823,16 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Import Modal */}
+      <Dialog open={showImportModal} onOpenChange={setShowImportModal}>
+        <DialogContent className="sm:max-w-3xl bg-dark-navy border-gray-700">
+          <DialogHeader>
+            <DialogTitle className="text-white">Import Trading Data</DialogTitle>
+          </DialogHeader>
+          <TradeImport onImportComplete={() => setShowImportModal(false)} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
