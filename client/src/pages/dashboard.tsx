@@ -12,6 +12,42 @@ import type { Trade, User } from "@shared/schema";
 import { ChartLine, Target, Calculator, Scale, Brain, TrendingUp } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
+// Performance Matrix helper function
+const generatePerformanceMatrix = (trades: Trade[] = []) => {
+  // Create 84 days (12 weeks) array
+  const today = new Date();
+  const matrix = Array.from({ length: 84 }, (_, i) => {
+    const date = new Date(today);
+    date.setDate(date.getDate() - (83 - i)); // Start from 84 days ago
+    
+    return {
+      date: date.toISOString().split('T')[0],
+      trades: 0,
+      pnl: 0,
+      intensity: 0
+    };
+  });
+
+  // Group trades by date and calculate daily P&L
+  trades.forEach(trade => {
+    const tradeDate = new Date(trade.createdAt || trade.date || '').toISOString().split('T')[0];
+    const dayIndex = matrix.findIndex(day => day.date === tradeDate);
+    
+    if (dayIndex !== -1) {
+      matrix[dayIndex].trades += 1;
+      matrix[dayIndex].pnl += trade.pnl || 0;
+    }
+  });
+
+  // Calculate intensity based on absolute P&L values
+  const maxAbsPnl = Math.max(...matrix.map(day => Math.abs(day.pnl)), 1);
+  matrix.forEach(day => {
+    day.intensity = Math.abs(day.pnl) / maxAbsPnl;
+  });
+
+  return matrix;
+};
+
 type TimePeriod = '1m' | '3m' | '1y';
 
 export default function Dashboard() {
@@ -675,45 +711,64 @@ export default function Dashboard() {
         <Card className="mt-6 glass-morphism border-gray-600">
           <CardHeader>
             <CardTitle className="text-xl">Performance Matrix</CardTitle>
+            <p className="text-sm text-gray-400">Daily P&L performance over the last 12 weeks</p>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-12 gap-1 max-w-4xl mx-auto">
-              {Array.from({ length: 84 }).map((_, i) => {
-                const weekDay = i % 7;
-                const week = Math.floor(i / 7);
-                const intensity = Math.random();
-                const profit = Math.random() > 0.5;
-                
-                return (
-                  <div
-                    key={i}
-                    className={`w-6 h-6 rounded-sm transition-all duration-200 hover:scale-110 cursor-pointer ${
-                      intensity > 0.8 
-                        ? profit ? 'bg-green-500' : 'bg-red-500'
-                        : intensity > 0.6
-                        ? profit ? 'bg-green-600' : 'bg-red-600'
-                        : intensity > 0.4
-                        ? profit ? 'bg-green-700' : 'bg-red-700'
-                        : intensity > 0.2
-                        ? profit ? 'bg-green-800' : 'bg-red-800'
-                        : 'bg-gray-700'
-                    }`}
-                    title={`Week ${week + 1}, Day ${weekDay + 1}: ${profit ? '+' : '-'}$${(intensity * 500).toFixed(0)}`}
-                  />
-                );
-              })}
-            </div>
-            <div className="flex justify-between items-center mt-4 text-sm text-gray-400">
-              <span>Less</span>
-              <div className="flex space-x-1">
-                <div className="w-3 h-3 bg-gray-700 rounded-sm"></div>
-                <div className="w-3 h-3 bg-green-800 rounded-sm"></div>
-                <div className="w-3 h-3 bg-green-600 rounded-sm"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
-                <div className="w-3 h-3 bg-green-400 rounded-sm"></div>
+            {tradesLoading ? (
+              <div className="flex items-center justify-center h-32">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                <span className="ml-2 text-gray-400">Loading performance data...</span>
               </div>
-              <span>More</span>
-            </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-12 gap-1 max-w-4xl mx-auto">
+                  {generatePerformanceMatrix(trades).map((day, i) => {
+                    const weekDay = i % 7;
+                    const week = Math.floor(i / 7);
+                    
+                    return (
+                      <div
+                        key={i}
+                        className={`w-6 h-6 rounded-sm transition-all duration-200 hover:scale-110 cursor-pointer ${
+                          day.pnl === 0 
+                            ? 'bg-gray-700'
+                            : day.pnl > 0
+                            ? day.intensity > 0.8 
+                              ? 'bg-green-400' 
+                              : day.intensity > 0.6
+                              ? 'bg-green-500'
+                              : day.intensity > 0.4
+                              ? 'bg-green-600'
+                              : 'bg-green-700'
+                            : day.intensity > 0.8 
+                              ? 'bg-red-400' 
+                              : day.intensity > 0.6
+                              ? 'bg-red-500'
+                              : day.intensity > 0.4
+                              ? 'bg-red-600'
+                              : 'bg-red-700'
+                        }`}
+                        title={`${day.date}: ${day.trades} trades, ${day.pnl >= 0 ? '+' : ''}${day.pnl.toFixed(2)} P&L`}
+                      />
+                    );
+                  })}
+                </div>
+                <div className="flex justify-between items-center mt-4 text-sm text-gray-400">
+                  <span>Less</span>
+                  <div className="flex space-x-1">
+                    <div className="w-3 h-3 bg-gray-700 rounded-sm"></div>
+                    <div className="w-3 h-3 bg-green-700 rounded-sm"></div>
+                    <div className="w-3 h-3 bg-green-600 rounded-sm"></div>
+                    <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
+                    <div className="w-3 h-3 bg-green-400 rounded-sm"></div>
+                  </div>
+                  <span>More</span>
+                </div>
+                <div className="mt-2 text-xs text-gray-500 text-center">
+                  Hover over squares to see detailed information
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
