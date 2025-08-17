@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { auth } from "@/lib/auth";
 import { tradeService } from "@/lib/tradeService";
@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import TradeModal from "@/components/trade-modal";
 import type { Trade, User } from "@shared/schema";
-import { ChartLine, Target, Calculator, Scale, Brain, TrendingUp } from "lucide-react";
+import { ChartLine, Target, Calculator, Scale, Brain, TrendingUp, Trash2 } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 // Performance Matrix helper function
@@ -100,6 +100,29 @@ export default function Dashboard() {
   console.log('🔍 Dashboard: Full tradesData:', tradesData);
   console.log('🔍 Dashboard: tradesError:', tradesError);
   console.log('🔍 Dashboard: extracted trades:', trades);
+
+  // Query client for cache invalidation
+  const queryClient = useQueryClient();
+
+  // Delete trade mutation
+  const deleteTradeMutation = useMutation({
+    mutationFn: (tradeId: string) => tradeService.deleteTrade(tradeId),
+    onSuccess: () => {
+      // Invalidate and refetch trades
+      queryClient.invalidateQueries({ queryKey: ["trades"] });
+    },
+    onError: (error) => {
+      console.error('❌ Error deleting trade:', error);
+      alert('Failed to delete trade. Please try again.');
+    },
+  });
+
+  // Delete handler with confirmation
+  const handleDeleteTrade = (tradeId: string, symbol: string) => {
+    if (window.confirm(`Are you sure you want to delete the ${symbol} trade? This action cannot be undone.`)) {
+      deleteTradeMutation.mutate(tradeId);
+    }
+  };
 
   // Calculate statistics from trades (same as Analytics page approach)
   const calculateStats = (trades: Trade[]) => {
@@ -576,7 +599,7 @@ export default function Dashboard() {
                     <Card key={trade.id} className="bg-darker-surface border-gray-700">
                       <CardContent className="p-3">
                         <div className="flex items-center justify-between">
-                          <div>
+                          <div className="flex-1">
                             <div className="font-semibold" data-testid={`text-symbol-${trade.id}`}>
                               {trade.symbol}
                             </div>
@@ -584,17 +607,29 @@ export default function Dashboard() {
                               {trade.type} • {new Date(trade.createdAt!).toLocaleDateString()}
                             </div>
                           </div>
-                          <div className="text-right">
-                            {trade.pnl && (
-                              <>
-                                <div className={`font-semibold ${(trade.pnl || 0) >= 0 ? 'status-positive' : 'status-negative'}`} data-testid={`text-pnl-${trade.id}`}>
-                                  {(trade.pnl || 0) >= 0 ? '+' : ''}{formatCurrency(trade.pnl || 0)}
-                                </div>
-                                <div className="text-sm text-gray-400">
-                                  {trade.returnPercent && `${(trade.returnPercent || 0) >= 0 ? '+' : ''}${trade.returnPercent}%`}
-                                </div>
-                              </>
-                            )}
+                          <div className="flex items-center gap-3">
+                            <div className="text-right">
+                              {trade.pnl && (
+                                <>
+                                  <div className={`font-semibold ${(trade.pnl || 0) >= 0 ? 'status-positive' : 'status-negative'}`} data-testid={`text-pnl-${trade.id}`}>
+                                    {(trade.pnl || 0) >= 0 ? '+' : ''}{formatCurrency(trade.pnl || 0)}
+                                  </div>
+                                  <div className="text-sm text-gray-400">
+                                    {trade.returnPercent && `${(trade.returnPercent || 0) >= 0 ? '+' : ''}${trade.returnPercent}%`}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteTrade(trade.id!, trade.symbol)}
+                              disabled={deleteTradeMutation.isPending}
+                              className="text-red-400 hover:text-red-300 hover:bg-red-900/20 p-2"
+                              title="Delete trade"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
                       </CardContent>
