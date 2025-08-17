@@ -1,112 +1,156 @@
-# TradeJournal Frontend
+# 📈 TradeZella - Advanced Trading Journal
 
-A modern trading journal application built with React, TypeScript, and Vite.
+> **🚀 [Live Demo](https://trade-track-phi.vercel.app) | [Backend API](https://render-backend-tradejournal.onrender.com)**
 
-## Features
+A modern, professional trading journal platform inspired by TradeZella, built for serious forex traders who want to track, analyze, and improve their trading performance.
 
-- 📊 Performance Matrix - Visual heatmap of daily trading performance
-- 📈 Analytics Dashboard - Comprehensive trading statistics and insights
-- 💼 Trade Management - Add, edit, and delete trading records
-- 🔐 User Authentication - Secure login and registration
-- 📱 Responsive Design - Works on desktop and mobile devices
-- 🎨 Modern UI - Built with ShadCN UI components
+![TradeZella Dashboard](https://img.shields.io/badge/Status-Live-brightgreen) ![React](https://img.shields.io/badge/React-18-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black)
 
-## Tech Stack
+## ✨ Key Features
 
-- **Frontend Framework**: React 18 with TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
-- **UI Components**: ShadCN UI
-- **State Management**: TanStack Query (React Query)
-- **Authentication**: JWT tokens
-- **Charts**: Recharts
-- **Icons**: Lucide React
+### 📊 **Performance Matrix**
+- Visual heatmap showing daily P&L patterns
+- Real-time data visualization from your trading history
+- Color-coded intensity based on profit/loss magnitude
 
-## Getting Started
+### 📈 **Analytics Dashboard** 
+- Comprehensive trading statistics and insights
+- Performance metrics across different time periods
+- Win rate, profit factor, and risk analytics
 
-1. **Clone the repository**
+### 💼 **Trade Management**
+- Add, edit, and delete trading records with confirmation
+- Detailed trade logging with entry/exit points
+- Stop loss and take profit tracking
 
-   ```bash
-   git clone https://github.com/CodeWithUtkarsha/TradeJournal.git
-   cd TradeJournal
-   ```
+### 📤 **XM Broker Integration**
+- **CSV Import**: Upload your XM broker trading history
+- Automatic data parsing and validation
+- Bulk import with duplicate filtering
 
-2. **Install dependencies**
+### 🔐 **Secure Authentication**
+- JWT-based user authentication
+- Protected routes and user sessions
+- Profile management with photo uploads
 
-   ```bash
-   npm install
-   ```
+### 🎨 **Modern UI/UX**
+- Responsive design for desktop and mobile
+- Dark theme with electric blue accents
+- Smooth animations and glass morphism effects
 
-3. **Set up environment variables**
+## 🛠 Tech Stack
 
-   ```bash
-   cp .env.example .env
-   ```
+| Technology | Purpose |
+|------------|---------|
+| **React 18** | Frontend framework with TypeScript |
+| **Vite** | Lightning-fast build tool |
+| **TailwindCSS** | Utility-first styling |
+| **ShadCN UI** | Modern component library |
+| **TanStack Query** | Server state management |
+| **Recharts** | Data visualization |
+| **Lucide React** | Beautiful icons |
+| **Node.js** | Backend API server |
+| **Vercel** | Frontend deployment |
+| **Render** | Backend deployment |
 
-   Update the `.env` file with your backend API URL:
+## 🚀 Quick Start
 
-   ```
-   VITE_API_URL=your_backend_api_url
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/CodeWithUtkarsha/TradeJournal.git
+cd TradeJournal
 
-4. **Start the development server**
+# Install dependencies
+npm install
 
-   ```bash
-   npm run dev
-   ```
+# Start development server
+npm run dev
 
-5. **Open your browser**
-   Navigate to `http://localhost:5173`
+# Open browser at http://localhost:5173
+```
 
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build locally
-- `npm run lint` - Run ESLint
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── ui/             # ShadCN UI components
-│   └── ...
-├── hooks/              # Custom React hooks
-├── lib/                # Utility functions and services
-├── pages/              # Application pages/routes
-├── types/              # TypeScript type definitions
-└── main.tsx           # Application entry point
+├── components/
+│   ├── ui/                 # ShadCN UI components
+│   ├── trade-modal.tsx     # Add/Edit trade modal
+│   ├── trade-import.tsx    # XM broker CSV import
+│   └── navigation.tsx      # App navigation
+├── hooks/
+│   └── use-toast.ts       # Toast notifications
+├── lib/
+│   ├── auth.ts            # Authentication service
+│   ├── tradeService.ts    # Trade API service
+│   └── utils.ts           # Utility functions
+├── pages/
+│   ├── dashboard.tsx      # Main trading dashboard
+│   ├── analytics.tsx      # Analytics and insights
+│   ├── login.tsx          # User authentication
+│   └── profile.tsx        # User profile management
+└── types/
+    └── auth.ts            # TypeScript definitions
 ```
 
-## Environment Variables
+## 🔧 Environment Setup
 
-Create a `.env` file in the root directory:
+Create `.env` file in the root directory:
 
 ```env
-VITE_API_URL=https://your-backend-api.com
+VITE_API_URL=https://render-backend-tradejournal.onrender.com
 ```
 
-## Deployment
+## 📊 XM Broker Import Guide
 
-This project is configured for deployment on Vercel:
+1. **Export from XM Platform:**
+   - Navigate to Account History in your XM platform
+   - Select your desired date range
+   - Export as CSV format
 
-1. Connect your GitHub repository to Vercel
-2. Set the environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
+2. **Import to TradeZella:**
+   - Click "Import XM Trades" in dashboard
+   - Upload your CSV file (drag & drop supported)
+   - System automatically validates and imports trades
 
-## Backend Repository
+3. **Expected CSV Format:**
+   ```
+   Date, Symbol, Action, Volume, Price, S/L, T/P, Profit, Comment
+   ```
 
-The backend API is deployed separately. Contact the development team for backend setup instructions.
+## 🌐 Deployment
 
-## Contributing
+- **Frontend**: Automatically deployed to Vercel on push to `main` branch
+- **Backend**: Deployed on Render with automatic API endpoints
+- **Database**: Cloud-hosted with automatic backups
+
+## 🔒 Security Features
+
+- JWT token authentication
+- Protected API routes
+- Input validation and sanitization
+- Secure file upload handling
+- Environment variable protection
+
+## 📈 Performance Features
+
+- Lazy loading for optimal performance
+- Efficient state management with TanStack Query
+- Optimized bundle size with Vite
+- Progressive Web App capabilities
+
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
-## License
+## 📄 License
 
-This project is private and proprietary.
+This project is proprietary and confidential.
+
+---
+
+**Built with ❤️ by [CodeWithUtkarsha](https://github.com/CodeWithUtkarsha)**
