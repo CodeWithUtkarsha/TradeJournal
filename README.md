@@ -25,27 +25,32 @@ A modern trading journal application built with React, TypeScript, and Vite.
 ## Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/CodeWithUtkarsha/TradeJournal.git
    cd TradeJournal
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Update the `.env` file with your backend API URL:
+
    ```
    VITE_API_URL=your_backend_api_url
    ```
 
 4. **Start the development server**
+
    ```bash
    npm run dev
    ```

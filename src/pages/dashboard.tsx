@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { tradeService } from "@/lib/tradeService";
 import { formatCurrency } from "@/lib/forexCalculations";
 import { ForexMetrics } from "@/components/ForexMetrics";
+import { TradeImport } from "@/components/trade-import";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -331,7 +332,14 @@ export default function Dashboard() {
             </p>
           </div>
           
-          <TradeModal />
+          <div className="flex gap-4">
+            <TradeModal />
+          </div>
+        </div>
+
+        {/* Trade Import Section */}
+        <div className="mb-8">
+          <TradeImport />
         </div>
 
         {/* Error Alert */}
