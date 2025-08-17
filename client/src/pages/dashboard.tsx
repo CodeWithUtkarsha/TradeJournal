@@ -584,7 +584,7 @@ export default function Dashboard() {
           <Card className="glass-morphism border-gray-600">
             <CardHeader>
               <CardTitle className="text-xl">Recent Trades</CardTitle>
-              <div className="text-xs text-gray-500">Latest trading activity</div>
+              <div className="text-xs text-gray-500">Latest trading activity with delete option</div>
             </CardHeader>
             <CardContent>
               {tradesLoading ? (
