@@ -13,6 +13,7 @@ import { ChartLine, Target, Calculator, Scale, Brain, TrendingUp, Trash2 } from 
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 // Performance Matrix helper function
+// Updated with delete functionality
 const generatePerformanceMatrix = (trades: Trade[] = []) => {
   // Create 84 days (12 weeks) array
   const today = new Date();
